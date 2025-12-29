@@ -1,8 +1,11 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./auth.css";
 import signupImg from "./images/signup.jpg";
 
 export default function SignUpPage() {
+  const navigate = useNavigate();
+
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [dobError, setDobError] = useState("");
@@ -22,36 +25,28 @@ export default function SignUpPage() {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  
-
-  // Format as DD / MM / YYYY while typing
   const handleDobChange = (e) => {
     const raw = e.target.value;
-    const digits = raw.replace(/\D/g, ""); // only keep digits
+    const digits = raw.replace(/\D/g, "");
 
     let formatted = "";
-    if (digits.length <= 2) {
-      formatted = digits;
-    } else if (digits.length <= 4) {
+    if (digits.length <= 2) formatted = digits;
+    else if (digits.length <= 4)
       formatted = `${digits.slice(0, 2)} / ${digits.slice(2)}`;
-    } else {
+    else
       formatted = `${digits.slice(0, 2)} / ${digits.slice(
         2,
         4
       )} / ${digits.slice(4, 8)}`;
-    }
 
     setForm((prev) => ({ ...prev, dob: formatted }));
     setDobError("");
   };
 
-  // Block keys other than digits, backspace, delete, arrows, tab
   const handleDobKeyDown = (e) => {
     const allowed = ["Backspace", "Delete", "ArrowLeft", "ArrowRight", "Tab"];
     if (allowed.includes(e.key)) return;
-    if (!/^\d$/.test(e.key)) {
-      e.preventDefault();
-    }
+    if (!/^\d$/.test(e.key)) e.preventDefault();
   };
 
   const isValidDob = (dobStr) => {
@@ -62,22 +57,13 @@ export default function SignUpPage() {
     const month = parseInt(digits.slice(2, 4), 10);
     const year = parseInt(digits.slice(4, 8), 10);
 
-    if (month < 1 || month > 12) return false;
-    if (day < 1 || day > 31) return false;
-
     const date = new Date(year, month - 1, day);
-    if (
-      date.getFullYear() !== year ||
-      date.getMonth() !== month - 1 ||
-      date.getDate() !== day
-    ) {
-      return false;
-    }
-
-    return true;
+    return (
+      date.getFullYear() === year &&
+      date.getMonth() === month - 1 &&
+      date.getDate() === day
+    );
   };
-
-  
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -93,7 +79,6 @@ export default function SignUpPage() {
   return (
     <div className="auth-root">
       <div className="auth-card">
-        {/* Image panel */}
         <div className="auth-visual">
           <img
             src={signupImg}
@@ -102,9 +87,12 @@ export default function SignUpPage() {
           />
         </div>
 
-        {/* Right form panel */}
         <div className="auth-panel">
-          <button className="auth-back-button" type="button">
+          <button
+            className="auth-back-button"
+            type="button"
+            onClick={() => navigate(-1)}
+          >
             ←
           </button>
 
@@ -112,7 +100,11 @@ export default function SignUpPage() {
             <h1>Create an Account</h1>
             <p className="auth-subtitle">
               Already have an account?{" "}
-              <button type="button" className="auth-link">
+              <button
+                type="button"
+                className="auth-link"
+                onClick={() => navigate("/login")}
+              >
                 Log in
               </button>
             </p>
@@ -121,9 +113,8 @@ export default function SignUpPage() {
           <form className="auth-form" onSubmit={handleSubmit}>
             <div className="auth-row">
               <div className="auth-field">
-                <label htmlFor="firstName">First Name</label>
+                <label>First Name</label>
                 <input
-                  id="firstName"
                   name="firstName"
                   value={form.firstName}
                   onChange={handleChange}
@@ -133,9 +124,8 @@ export default function SignUpPage() {
               </div>
 
               <div className="auth-field">
-                <label htmlFor="lastName">Last Name</label>
+                <label>Last Name</label>
                 <input
-                  id="lastName"
                   name="lastName"
                   value={form.lastName}
                   onChange={handleChange}
@@ -146,27 +136,24 @@ export default function SignUpPage() {
             </div>
 
             <div className="auth-field">
-              <label htmlFor="dob">Date of Birth</label>
+              <label>Date of Birth</label>
               <input
-                id="dob"
                 name="dob"
-                type="text"
                 value={form.dob}
                 onChange={handleDobChange}
                 onKeyDown={handleDobKeyDown}
                 placeholder="DD / MM / YYYY"
                 maxLength={14}
                 required
-                />
-                <div className="auth-error-slot"> 
+              />
+              <div className="auth-error-slot">
                 {dobError && <span className="auth-error">{dobError}</span>}
-                </div>
+              </div>
             </div>
 
             <div className="auth-field">
-              <label htmlFor="phone">Phone Number</label>
+              <label>Phone Number</label>
               <input
-                id="phone"
                 name="phone"
                 value={form.phone}
                 onChange={handleChange}
@@ -175,9 +162,8 @@ export default function SignUpPage() {
             </div>
 
             <div className="auth-field">
-              <label htmlFor="email">Email Address</label>
+              <label>Email Address</label>
               <input
-                id="email"
                 type="email"
                 name="email"
                 value={form.email}
@@ -187,12 +173,10 @@ export default function SignUpPage() {
               />
             </div>
 
-            {/* Password */}
             <div className="auth-field">
-              <label htmlFor="password">Password</label>
+              <label>Password</label>
               <div className="auth-password-wrapper">
                 <input
-                  id="password"
                   name="password"
                   type={showPassword ? "text" : "password"}
                   value={form.password}
@@ -210,12 +194,10 @@ export default function SignUpPage() {
               </div>
             </div>
 
-            {/* Confirm Password */}
             <div className="auth-field">
-              <label htmlFor="confirmPassword">Re-enter Password</label>
+              <label>Re-enter Password</label>
               <div className="auth-password-wrapper">
                 <input
-                  id="confirmPassword"
                   name="confirmPassword"
                   type={showConfirmPassword ? "text" : "password"}
                   value={form.confirmPassword}
@@ -233,7 +215,7 @@ export default function SignUpPage() {
               </div>
             </div>
 
-            <button type="submit" className="auth-primary-button">
+            <button className="auth-primary-button" type="submit">
               Create Account
             </button>
           </form>

@@ -202,3 +202,66 @@ body {
     grid-template-columns: 1fr;
   }
 }
+/* ===== Verification Code page extras ===== */
+
+.auth-subtitle--verify {
+  max-width: 420px;
+}
+
+.auth-verify-email {
+  font-weight: 600;
+  color: #111;
+}
+
+.auth-otp-row {
+  display: flex;
+  gap: 16px;
+  margin-top: 6px;
+  margin-bottom: 10px;
+}
+
+.auth-otp-input {
+  width: 120px;
+  height: 52px;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: #fff;
+  text-align: center;
+  font-size: 16px;
+  font-weight: 600;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.auth-otp-input:focus {
+  border-color: rgba(0, 0, 0, 0.35);
+  box-shadow: 0 0 0 4px rgba(0, 0, 0, 0.06);
+}
+
+.auth-otp-input.is-active {
+  border-color: rgba(0, 0, 0, 0.6);
+}
+
+.auth-resend-line {
+  display: flex;
+  justify-content: flex-end;
+  font-size: 12px;
+  color: rgba(0, 0, 0, 0.55);
+  margin-bottom: 18px;
+}
+
+.auth-resend-time {
+  font-weight: 700;
+  color: rgba(0, 0, 0, 0.75);
+}
+
+/* Makes the OTP inputs responsive */
+@media (max-width: 520px) {
+  .auth-otp-row {
+    gap: 10px;
+  }
+  .auth-otp-input {
+    width: 74px;
+  }
+}
+

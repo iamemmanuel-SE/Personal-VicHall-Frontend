@@ -1,15 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./auth.css";
-import loginImg from "./images/login.jpg";
+import forgotImg from "./images/forgot_password.jpg"; 
 
-export default function Login() {
+export default function ForgotPassword() {
   const navigate = useNavigate();
-  const [showPassword, setShowPassword] = useState(false);
 
   const [form, setForm] = useState({
     email: "",
-    password: "",
   });
 
   const handleChange = (e) => {
@@ -19,7 +17,7 @@ export default function Login() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Login form:", form);
+    console.log("Forgot password:", form);
   };
 
   return (
@@ -27,7 +25,7 @@ export default function Login() {
       <div className="auth-card">
         <div className="auth-visual">
           <img
-            src={loginImg}
+            src={forgotImg}
             alt="Victoria Hall artwork"
             className="auth-visual-image"
           />
@@ -38,12 +36,13 @@ export default function Login() {
             className="auth-back-button"
             type="button"
             onClick={() => navigate(-1)}
+            aria-label="Go back"
           >
             ←
           </button>
 
           <div className="auth-header">
-            <h1>Log in</h1>
+            <h1>Forgot password</h1>
             <p className="auth-subtitle">
               Don’t have an account?{" "}
               <button
@@ -69,39 +68,8 @@ export default function Login() {
               />
             </div>
 
-            <div className="auth-field">
-              <label>Password</label>
-              <div className="auth-password-wrapper">
-                <input
-                  name="password"
-                  type={showPassword ? "text" : "password"}
-                  value={form.password}
-                  onChange={handleChange}
-                  placeholder="Enter your password"
-                  required
-                />
-                <button
-                  type="button"
-                  className="auth-password-toggle"
-                  onClick={() => setShowPassword((s) => !s)}
-                >
-                  {showPassword ? "Hide" : "Show"}
-                </button>
-              </div>
-
-              <div className="auth-forgot-wrapper">
-                <button
-                  type="button"
-                  className="auth-link auth-forgot"
-                  onClick={() => navigate("/forgot-password")}
-                >
-                  Forgot password
-                </button>
-              </div>
-            </div>
-
             <button className="auth-primary-button" type="submit">
-              Log in
+              Send Verification Code
             </button>
           </form>
         </div>

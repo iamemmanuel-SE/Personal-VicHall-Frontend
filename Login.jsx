@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./auth.css";
-import loginImg from "./images/login.jpg";
+import loginImg from "./assets/login.jpg";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -12,14 +12,45 @@ export default function Login() {
     password: "",
   });
 
+  const [formError, setFormError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
+    setFormError("");
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Login form:", form);
+    setFormError("");
+    setIsSubmitting(true);
+
+    try {
+      
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        setFormError(data.message || "Login failed. Please try again.");
+        return;
+      }
+
+
+      localStorage.setItem("vichall_user", JSON.stringify(data.user));
+
+      // Upon successful login, navigate to main page
+      navigate("/mainpage");
+    } catch (err) {
+      setFormError("Could not connect to the server. Is your backend running?");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -55,6 +86,12 @@ export default function Login() {
               </button>
             </p>
           </div>
+
+          {formError && (
+            <div className="auth-error-slot" style={{ marginBottom: 12 }}>
+              <span className="auth-error">{formError}</span>
+            </div>
+          )}
 
           <form className="auth-form" onSubmit={handleSubmit}>
             <div className="auth-field">
@@ -100,8 +137,8 @@ export default function Login() {
               </div>
             </div>
 
-            <button className="auth-primary-button" type="submit">
-              Log in
+            <button className="auth-primary-button" type="submit" disabled={isSubmitting}>
+              {isSubmitting ? "Logging in..." : "Log in"}
             </button>
           </form>
         </div>

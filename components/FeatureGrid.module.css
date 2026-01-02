@@ -1,0 +1,192 @@
+.grid {
+  display: flex;
+  gap: 20px;
+  padding: 0 20px;
+  margin-top: 4rem;
+  flex-wrap: wrap;
+  justify-content: space-between; /* Ensure meaningful distribution */
+  width: 100%;
+}
+
+.card {
+  border-radius: 22px;
+  position: relative;
+  overflow: hidden;
+  background-size: cover;
+  background-position: center;
+  flex-grow: 1; /* Expand to fill space */
+  flex-shrink: 1; /* Allow shrinking if needed */
+}
+
+.cardStarSaver {
+  width: 333px;
+  height: 226px;
+  background-image: url("../assets/feature_kids.png");
+  display: flex;
+  align-items: flex-end;
+  align-self: flex-start;
+}
+
+.starSaverContent {
+  width: 100%;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.starSaverContent h3 {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 18px;
+  color: white;
+  margin: 0;
+}
+
+.cardGoldenMoments {
+  width: 459px;
+  height: 381px;
+  background: #f6f6f6;
+  padding: 40px 30px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+}
+
+.cardHeader h3 {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 32px;
+  line-height: 1.1;
+  color: #000000;
+  margin: 0;
+}
+
+.toggleWrapper {
+  width: 72px;
+  height: 35px;
+  background: #d9d9d9;
+  border-radius: 20px;
+  position: relative;
+}
+
+.toggleCircle {
+  width: 27px;
+  height: 27px;
+  background: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 4px;
+  right: 4px;
+}
+
+.cardText {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  color: #676767;
+  letter-spacing: -0.06em;
+  margin-top: auto;
+}
+
+.cardGroupBookings {
+  width: 332px;
+  height: 381px;
+  background-image: url("../assets/feature_quote.png");
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.cardGroupBookings::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.2);
+  z-index: 0;
+}
+
+.groupText {
+  position: relative;
+  z-index: 1;
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  color: #676767;
+}
+
+.groupFooter {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.groupFooter h3 {
+  font-family: "Poppins", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  color: #000000;
+  margin: 0;
+}
+
+.cardLoyal {
+  width: 215px;
+  height: 226px;
+  background-image: url("../assets/feature_ticket.png");
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+  box-sizing: border-box;
+  align-self: flex-start;
+}
+
+.loyalContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.loyalContent h3 {
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+  color: #000000;
+  margin: 0;
+}
+
+.iconBtn {
+  width: 42px;
+  height: 42px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+}
+
+@media (max-width: 1400px) {
+  .grid {
+    padding: 0 20px;
+    justify-content: flex-start;
+    overflow-x: auto;
+  }
+}

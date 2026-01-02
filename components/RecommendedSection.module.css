@@ -1,0 +1,154 @@
+.section {
+  padding: 4rem 20px;
+}
+
+.header {
+  margin-bottom: 3rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header h2 {
+  font-family: "Poppins", sans-serif;
+  font-size: 40px;
+  font-weight: 400;
+  line-height: 60px;
+  margin-bottom: 0.5rem;
+  color: #000000;
+}
+
+.subtitle {
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+  color: #676767;
+  font-weight: 400;
+  line-height: 1.2;
+  width: 250px;
+}
+
+.grid {
+  display: flex;
+  gap: 20px;
+}
+.card {
+  position: relative;
+  height: 800px;
+  border-radius: 22px;
+  overflow: hidden;
+  background: #000;
+  transition: width 0.3s ease-in-out;
+  width: 25%;
+}
+
+.card:hover {
+  width: 50%;
+}
+
+.card:first-child {
+  width: 50%;
+}
+
+.grid:has(.card:not(:first-child):hover) .card:first-child {
+  width: 25%;
+}
+
+.cardBg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+.card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.2) 50%,
+    rgba(0, 0, 0, 0.6) 100%
+  );
+  z-index: 1;
+}
+
+.cardContent {
+  position: absolute;
+  bottom: 20%;
+  left: 30px;
+  right: 30px;
+  z-index: 2;
+  color: white;
+}
+
+.cardContent h3 {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-size: 40px;
+  line-height: 1.14;
+  letter-spacing: -0.06em;
+  color: white;
+  margin: 0 0 24px 0;
+}
+
+.cardContent p {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.14;
+  color: white;
+}
+
+.bookBtn {
+  position: absolute;
+  bottom: 40px;
+  left: 30px;
+  right: 30px;
+  height: 55px;
+  background: #ffffff;
+  border-radius: 30px;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 25px;
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  color: #000000;
+  cursor: pointer;
+  z-index: 2;
+  transition: transform 0.2s;
+}
+
+.bookBtn:hover {
+  transform: scale(1.02);
+}
+
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cardContent {
+    top: auto;
+    bottom: 120px; /* Adjust for mobile flow */
+  }
+
+  .cardContent h3 {
+    font-size: 32px;
+  }
+}

@@ -1,0 +1,113 @@
+.hero {
+  position: relative;
+  min-height: 800px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  padding: 50px 20px 0 20px;
+  margin-top: 20px;
+  margin-bottom: 50px;
+  box-sizing: border-box;
+}
+
+.heroBackground {
+  position: relative;
+  width: 100%;
+  height: 732px;
+  background-size: cover;
+  background-position: center;
+  border-radius: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 100px;
+  box-sizing: border-box;
+}
+
+.heroContainer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 40px;
+}
+
+.headline {
+  position: relative;
+  left: auto;
+  top: auto;
+
+  width: 645px;
+  height: 288px;
+  font-family: "Poppins", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 48px;
+  line-height: 72px;
+  letter-spacing: -0.06em;
+  color: #ffffff;
+  text-align: left;
+  z-index: 2;
+}
+
+.widgetWrapper {
+  position: relative;
+  left: auto;
+  top: auto;
+
+  width: 374px;
+  height: 461px;
+
+  border-radius: 22px;
+  pointer-events: auto;
+  z-index: 2;
+
+  margin-top: 50px;
+}
+
+@media (max-width: 1400px) {
+  .heroBackground {
+    height: auto;
+    min-height: 600px;
+    flex-direction: column;
+    justify-content: center;
+    gap: 40px;
+    padding: 40px;
+  }
+
+  .headline {
+    width: 100%;
+    height: auto;
+    text-align: center;
+    position: relative;
+    left: auto;
+    top: auto;
+    margin: 0;
+  }
+
+  .widgetWrapper {
+    margin-top: 20px;
+    width: 100%;
+    max-width: 374px;
+    height: auto;
+  }
+}
+
+@media (max-width: 900px) {
+  .hero {
+    padding: 0; /* Remove side padding on very small screens if desired, or keep it */
+    padding-top: 20px;
+  }
+
+  .heroBackground {
+    border-radius: 0;
+    padding: 40px 20px;
+    height: auto;
+  }
+
+  .headline {
+    font-size: 32px;
+    line-height: 1.3;
+  }
+}

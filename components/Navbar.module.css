@@ -1,0 +1,136 @@
+.navbar {
+  position: relative;
+  width: 100%;
+  z-index: 100;
+  padding: 0 30px;
+  box-sizing: border-box;
+  margin-top: 20px;
+}
+
+.navContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.logo {
+  font-family: "Inter", sans-serif;
+  font-size: 24px;
+  font-weight: 500;
+  color: #000000;
+  white-space: nowrap;
+}
+
+.navLinks {
+  display: flex;
+  gap: 3rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.navLinks a {
+  font-family: "Inter", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  color: #000000;
+  text-decoration: none;
+}
+
+.navActions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.loginBtn {
+  width: 107px;
+  height: 45px;
+  background: #e9e9ea;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Inter", sans-serif;
+  font-size: 16px;
+  color: #000000;
+  border: none;
+  cursor: pointer;
+}
+
+.loginInner {
+  background: #ffffff;
+  border-radius: 30px;
+  width: 102px;
+  height: 39px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.registerBtn {
+  width: 136px;
+  height: 45px;
+  background: #000000;
+  border-radius: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-family: "Inter", sans-serif;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+/* User Requested Search Bar Styles */
+.searchBar {
+  position: absolute;
+  width: 381px;
+  height: 45px;
+  left: 20px;
+  top: 60px;
+}
+
+.searchBg {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  background: #e9e9ea;
+  border-radius: 30px;
+}
+
+/* White Circle for Icon - "Ellipse 1" */
+.searchIconWrapper {
+  position: absolute;
+  width: 29px;
+  height: 29px;
+  left: 9px;
+  top: 8px;
+  background: #ffffff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.searchIcon {
+  color: #1e1e1e;
+}
+
+.searchText {
+  position: absolute;
+  left: 46px;
+  top: 10px;
+  font-family: "Poppins", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: -0.06em;
+  color: #000000;
+}

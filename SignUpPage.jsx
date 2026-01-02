@@ -1,14 +1,17 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./auth.css";
-import signupImg from "./images/signup.jpg";
+import signupImg from "./assets/signup.jpg";
 
 export default function SignUpPage() {
   const navigate = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+
   const [dobError, setDobError] = useState("");
+  const [formError, setFormError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [form, setForm] = useState({
     firstName: "",
@@ -23,6 +26,7 @@ export default function SignUpPage() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
+    setFormError("");
   };
 
   const handleDobChange = (e) => {
@@ -31,16 +35,18 @@ export default function SignUpPage() {
 
     let formatted = "";
     if (digits.length <= 2) formatted = digits;
-    else if (digits.length <= 4)
+    else if (digits.length <= 4) {
       formatted = `${digits.slice(0, 2)} / ${digits.slice(2)}`;
-    else
-      formatted = `${digits.slice(0, 2)} / ${digits.slice(
-        2,
-        4
-      )} / ${digits.slice(4, 8)}`;
+    } else {
+      formatted = `${digits.slice(0, 2)} / ${digits.slice(2, 4)} / ${digits.slice(
+        4,
+        8
+      )}`;
+    }
 
     setForm((prev) => ({ ...prev, dob: formatted }));
     setDobError("");
+    setFormError("");
   };
 
   const handleDobKeyDown = (e) => {
@@ -65,15 +71,53 @@ export default function SignUpPage() {
     );
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setFormError("");
+    setDobError("");
 
+    // DOB validation
     if (!isValidDob(form.dob)) {
       setDobError("Please enter a valid date of birth (DD / MM / YYYY).");
       return;
     }
 
-    console.log("Sign up form:", form);
+    // Password match validation
+    if (form.password !== form.confirmPassword) {
+      setFormError("Passwords do not match.");
+      return;
+    }
+
+    // Password length validation
+    if (form.password.length < 8) {
+      setFormError("Password must be at least 8 characters.");
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
+
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok) {
+        setFormError(data.message || "Registration failed. Please try again.");
+        return;
+      }
+
+      // Successful registration opens the login page
+      navigate("/login");
+    } catch (err) {
+      setFormError("Could not connect to the server. Is your backend running?");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -109,6 +153,13 @@ export default function SignUpPage() {
               </button>
             </p>
           </div>
+
+          {/* General form error slot */}
+          {formError && (
+            <div className="auth-error-slot" style={{ marginBottom: 12 }}>
+              <span className="auth-error">{formError}</span>
+            </div>
+          )}
 
           <form className="auth-form" onSubmit={handleSubmit}>
             <div className="auth-row">
@@ -215,8 +266,12 @@ export default function SignUpPage() {
               </div>
             </div>
 
-            <button className="auth-primary-button" type="submit">
-              Create Account
+            <button
+              className="auth-primary-button"
+              type="submit"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Creating..." : "Create Account"}
             </button>
           </form>
         </div>

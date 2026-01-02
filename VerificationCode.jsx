@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./auth.css";
-import verifyImg from "./images/verification.jpg"; 
+import verifyImg from "./assets/verification.jpg"; 
 
 export default function VerificationCode() {
   const navigate = useNavigate();

@@ -1,61 +1,59 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./auth.css";
-import resetImg from "./assets/reset_password.jpg"; 
+import resetImg from "./assets/reset_password.jpg";
 import { useLocation, useNavigate } from "react-router-dom";
-import { canResetPassword, resetPassword } from "./auth/fakeResetApi"; 
-import { useEffect } from "react";
+import { resetPassword as resetPasswordApi } from "./auth/resetApi";
 
 export default function ResetPassword() {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const email = location.state?.email || "";
+  const resetToken = location.state?.resetToken || "";
 
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const location = useLocation();
-  const email = location.state?.email || "";
-  const resetToken = location.state?.resetToken || "";
 
   const [form, setForm] = useState({
     newPassword: "",
     confirmPassword: "",
   });
 
+  // If user refreshes the page or opens it directly, state will be missing → bounce them back
+  useEffect(() => {
+    if (!email || !resetToken) {
+      navigate("/forgot-password");
+    }
+  }, [email, resetToken, navigate]);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  if (form.newPassword !== form.confirmPassword) {
-    alert("Passwords do not match.");
-    return;
-  }
+    if (form.newPassword !== form.confirmPassword) {
+      alert("Passwords do not match.");
+      return;
+    }
 
+    if (form.newPassword.length < 8) {
+      alert("Password must be at least 8 characters.");
+      return;
+    }
 
-  if (form.newPassword.length < 8) {
-    alert("Password must be at least 8 characters.");
-    return;
-  }
-
-  const res = resetPassword(email, resetToken, form.newPassword);
-  if (!res.ok) {
-    alert(res.error);
-    navigate("/forgot-password");
-    return;
-  }
-
-  alert("Password reset successful (simulated).");
-  navigate("/login");
-};
-
-  useEffect(() => {
-    const gate = canResetPassword(email, resetToken);
-    if (!gate.ok) {
-      alert(gate.error);
+    try {
+      await resetPasswordApi(email, resetToken, form.newPassword);
+      alert("Password reset successful.");
+      navigate("/login");
+    } catch (err) {
+      alert(err.message);
       navigate("/forgot-password");
     }
-}, [email, resetToken, navigate]);
+  };
+
   return (
     <div className="auth-root">
       <div className="auth-card">

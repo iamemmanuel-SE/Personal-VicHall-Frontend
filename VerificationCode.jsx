@@ -1,46 +1,83 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./auth.css";
-import verifyImg from "./assets/verification.jpg"; 
+import verifyImg from "./assets/verification.jpg";
 import { useLocation, useNavigate } from "react-router-dom";
-import { resendCode, verifyResetCode } from "./auth/fakeResetApi"; 
+import { resendResetCode, verifyResetCode } from "./auth/resetApi";
 
 export default function VerificationCode() {
   const navigate = useNavigate();
-
-  // Example email displayed like the design
   const location = useLocation();
   const email = location.state?.email || "";
 
-
-  const [code, setCode] = useState(["", "", "", ""]); 
+  const [code, setCode] = useState(["", "", "", ""]);
   const inputsRef = useRef([]);
 
-  
-  const [secondsLeft, setSecondsLeft] = useState(30); 
-  useEffect(() => {
-  if (!email) navigate("/forgot-password");
-}, [email, navigate]);
+  const [secondsLeft, setSecondsLeft] = useState(30);
+
+  // timer refs
+  const timerRef = useRef(null);
+
+  // ✅ NEW: only resend after we've ticked down at least once (prevents initial resend)
+  const hasTickedRef = useRef(false);
+
+  // ✅ Prevent multiple resends during the same "30" state
+  const hasResentThisCycleRef = useRef(false);
 
   useEffect(() => {
-  const interval = setInterval(() => {
-    setSecondsLeft((prev) => {
-      if (prev <= 0) {
-        // simulate resend
-        if (email) resendCode(email);
-        return 30;
-      }
-      return prev - 1;
-    });
-  }, 1000);
+    if (!email) navigate("/forgot-password");
+  }, [email, navigate]);
 
-  return () => clearInterval(interval);
-}, [email]);
+  // Single setTimeout loop instead of setInterval
+  useEffect(() => {
+    if (!email) return;
 
+    if (timerRef.current) clearTimeout(timerRef.current);
+
+    timerRef.current = setTimeout(() => {
+      setSecondsLeft((prev) => (prev <= 1 ? 30 : prev - 1));
+    }, 1000);
+
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, [secondsLeft, email]);
+
+  // Mark that we have ticked at least once (i.e., we left 30 and started counting)
+  useEffect(() => {
+    if (secondsLeft < 30) {
+      hasTickedRef.current = true;
+    }
+
+    // reset cycle lock when we are not at 30
+    if (secondsLeft !== 30) {
+      hasResentThisCycleRef.current = false;
+    }
+  }, [secondsLeft]);
+
+  // ✅ Auto-resend ONLY when timer resets to 30 AFTER at least one tick happened
+  useEffect(() => {
+    if (!email) return;
+
+    // If we haven't ticked down yet, this is the initial 30 on page load → DO NOTHING
+    if (!hasTickedRef.current) return;
+
+    // When it resets to 30 (after reaching 1), resend exactly once
+    if (secondsLeft === 30 && !hasResentThisCycleRef.current) {
+      hasResentThisCycleRef.current = true;
+
+      resendResetCode(email)
+        .then((res) => {
+          if (res.devCode) {
+            console.log(`[DEV] Resent code for ${email}: ${res.devCode}`);
+          }
+        })
+        .catch((err) => console.log(err.message));
+    }
+  }, [secondsLeft, email]);
 
   const formatTime = (s) => String(s).padStart(2, "0");
 
   const handleChange = (idx, value) => {
-    // Keep it digit-only (still just UI)
     const digit = value.replace(/\D/g, "").slice(-1);
     setCode((prev) => {
       const next = [...prev];
@@ -48,7 +85,6 @@ export default function VerificationCode() {
       return next;
     });
 
-    // Auto move to next box for a nice UX (optional)
     if (digit && inputsRef.current[idx + 1]) {
       inputsRef.current[idx + 1].focus();
     }
@@ -60,21 +96,18 @@ export default function VerificationCode() {
     }
   };
 
-  const handleSubmit = (e) => {
-  e.preventDefault();
-  const codeStr = code.join("");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const codeStr = code.join("");
+    if (codeStr.length !== 4) return;
 
-  if (codeStr.length !== 4) return;
-
-  const res = verifyResetCode(email, codeStr);
-  if (!res.ok) {
-    alert(res.error); 
-    return;
-  }
-
-  navigate("/reset-password", { state: { email, resetToken: res.resetToken } });
-};
-
+    try {
+      const res = await verifyResetCode(email, codeStr);
+      navigate("/reset-password", { state: { email, resetToken: res.resetToken } });
+    } catch (err) {
+      alert(err.message);
+    }
+  };
 
   return (
     <div className="auth-root">

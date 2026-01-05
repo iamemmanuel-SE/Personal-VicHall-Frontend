@@ -1,7 +1,17 @@
 import { Search } from "lucide-react";
 import styles from "./Navbar.module.css";
+import { Link, useNavigate } from "react-router-dom";
+import { clearSession, isLoggedIn } from "../auth/authStore";
 
 const Navbar = () => {
+  const navigate = useNavigate();
+  const loggedIn = isLoggedIn();
+
+  const handleSignOut = () => {
+    clearSession();
+    navigate("/mainpage");
+  };
+
   return (
     <nav className={styles.navbar}>
       <div className={styles.navContainer}>
@@ -12,24 +22,44 @@ const Navbar = () => {
             <a href="#home">Home</a>
           </li>
           <li>
-            <a href="#events">Events</a>
+            <Link to="/events">Events</Link>
           </li>
           <li>
-            <a href="#about">About</a>
+            <Link to="/about">About</Link>
           </li>
           <li>
-            <a href="#bookings">Bookings</a>
+            <Link to="/bookings">Bookings</Link>
           </li>
         </ul>
 
         <div className={styles.navActions}>
-          <button className={styles.loginBtn}>
-            <span className={styles.loginInner}>Log in</span>
-          </button>
-          <button className={styles.registerBtn}>Register</button>
+          {!loggedIn ? (
+            <>
+              <Link to="/login">
+                <button className={styles.loginBtn}>
+                  <span className={styles.loginInner}>Log in</span>
+                </button>
+              </Link>
+
+              <Link to="/signup">
+                <button className={styles.registerBtn}>Register</button>
+              </Link>
+            </>
+          ) : (
+            <>
+
+              <Link to="/account">
+                <button className={styles.loginBtn}>
+                  <span className={styles.loginInner}>Account</span>
+                </button>
+              </Link>
+
+              
+            </>
+          )}
         </div>
       </div>
-      {/* Search Bar - Nested in Navbar as requested */}
+
       <div className={styles.searchBar}>
         <div className={styles.searchBg}></div>
         <div className={styles.searchIconWrapper}>

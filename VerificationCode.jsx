@@ -1,13 +1,15 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
 import "./auth.css";
 import verifyImg from "./assets/verification.jpg"; 
+import { useLocation, useNavigate } from "react-router-dom";
+import { resendCode, verifyResetCode } from "./auth/fakeResetApi"; 
 
 export default function VerificationCode() {
   const navigate = useNavigate();
 
   // Example email displayed like the design
-  const email = useMemo(() => ".....Dev@gmail.com", []);
+  const location = useLocation();
+  const email = location.state?.email || "";
 
 
   const [code, setCode] = useState(["", "", "", ""]); 
@@ -15,17 +17,25 @@ export default function VerificationCode() {
 
   
   const [secondsLeft, setSecondsLeft] = useState(30); 
+  useEffect(() => {
+  if (!email) navigate("/forgot-password");
+}, [email, navigate]);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setSecondsLeft((prev) => {
-        if (prev <= 0) return 30; 
-        return prev - 1;
-      });
-    }, 1000);
+  const interval = setInterval(() => {
+    setSecondsLeft((prev) => {
+      if (prev <= 0) {
+        // simulate resend
+        if (email) resendCode(email);
+        return 30;
+      }
+      return prev - 1;
+    });
+  }, 1000);
 
-    return () => clearInterval(interval);
-  }, []);
+  return () => clearInterval(interval);
+}, [email]);
+
 
   const formatTime = (s) => String(s).padStart(2, "0");
 
@@ -51,9 +61,20 @@ export default function VerificationCode() {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Verify code:", code.join(""));
-  };
+  e.preventDefault();
+  const codeStr = code.join("");
+
+  if (codeStr.length !== 4) return;
+
+  const res = verifyResetCode(email, codeStr);
+  if (!res.ok) {
+    alert(res.error); 
+    return;
+  }
+
+  navigate("/reset-password", { state: { email, resetToken: res.resetToken } });
+};
+
 
   return (
     <div className="auth-root">

@@ -1,13 +1,18 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import "./auth.css";
-import resetImg from "./images/reset_password.jpg"; 
+import resetImg from "./assets/reset_password.jpg"; 
+import { useLocation, useNavigate } from "react-router-dom";
+import { canResetPassword, resetPassword } from "./auth/fakeResetApi"; 
+import { useEffect } from "react";
 
 export default function ResetPassword() {
   const navigate = useNavigate();
 
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const location = useLocation();
+  const email = location.state?.email || "";
+  const resetToken = location.state?.resetToken || "";
 
   const [form, setForm] = useState({
     newPassword: "",
@@ -20,10 +25,37 @@ export default function ResetPassword() {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Reset password form:", form);
-  };
+  e.preventDefault();
 
+  if (form.newPassword !== form.confirmPassword) {
+    alert("Passwords do not match.");
+    return;
+  }
+
+
+  if (form.newPassword.length < 8) {
+    alert("Password must be at least 8 characters.");
+    return;
+  }
+
+  const res = resetPassword(email, resetToken, form.newPassword);
+  if (!res.ok) {
+    alert(res.error);
+    navigate("/forgot-password");
+    return;
+  }
+
+  alert("Password reset successful (simulated).");
+  navigate("/login");
+};
+
+  useEffect(() => {
+    const gate = canResetPassword(email, resetToken);
+    if (!gate.ok) {
+      alert(gate.error);
+      navigate("/forgot-password");
+    }
+}, [email, resetToken, navigate]);
   return (
     <div className="auth-root">
       <div className="auth-card">

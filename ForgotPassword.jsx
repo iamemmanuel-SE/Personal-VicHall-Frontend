@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./auth.css";
 import forgotImg from "./assets/forgot_password.jpg"; 
+import { startPasswordReset } from "./auth/fakeResetApi"; 
+
 
 export default function ForgotPassword() {
   const navigate = useNavigate();
@@ -16,9 +18,11 @@ export default function ForgotPassword() {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Forgot password:", form);
-  };
+  e.preventDefault();
+  startPasswordReset(form.email);
+  navigate("/verify", { state: { email: form.email } });
+};
+
 
   return (
     <div className="auth-root">

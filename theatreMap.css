@@ -1,0 +1,109 @@
+/* =============================
+   MAP CONTAINER
+============================= */
+.mapWrap {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border-radius: 18px;
+  border: 1px solid #e6e6e6;
+  background: #fff;
+}
+
+/* SVG */
+.theatreSvg {
+  width: 100%;
+  height: auto;
+  display: block;
+  cursor: grab;
+}
+
+.theatreSvg:active {
+  cursor: grabbing;
+}
+
+/* =============================
+   SEAT INTERACTION
+============================= */
+.theatreSvg circle[data-section] {
+  cursor: pointer;
+  transition: transform 0.12s ease, opacity 0.12s ease;
+  transform-origin: center;
+   /* Fix SVG hover “jump” */
+   transform-box: fill-box;
+   transform-origin: center;
+}
+
+.theatreSvg circle[data-section]:hover {
+  transform: scale(1.25);
+  opacity: 0.9;
+}
+
+.theatreSvg circle[data-section][data-status="unavailable"] {
+  cursor: not-allowed;
+  opacity: 0.35;
+}
+
+.theatreSvg circle[data-selected="true"] {
+  fill: #22c55e !important;
+  stroke: #111;
+  stroke-width: 2px;
+  transform: scale(1.00);
+}
+
+/* =============================
+   TOOLTIP
+============================= */
+.seatTooltip {
+  position: absolute;
+  z-index: 5;
+  pointer-events: none;
+  padding: 8px 10px;
+  border-radius: 10px;
+  font-size: 12px;
+  background: rgba(20, 20, 20, 0.92);
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.15);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+  transform: translate(10px, 10px);
+  white-space: nowrap;
+}
+
+/* =============================
+   LAYER TRANSITIONS
+============================= */
+.layer {
+  transition: opacity 220ms ease;
+}
+
+/* ===== SECTIONS MODE ===== */
+.theatreSvg[data-mode="sections"] .layer--sections {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Stage + base remain visible */
+.theatreSvg[data-mode="sections"] .layer--seats {
+  opacity: 1;
+  pointer-events: none;
+}
+
+/* Hide ONLY seat circles initially */
+.theatreSvg[data-mode="sections"] .layer--seats circle[data-section] {
+  opacity: 0;
+}
+
+/* ===== SEATS MODE ===== */
+.theatreSvg[data-mode="seats"] .layer--sections {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.theatreSvg[data-mode="seats"] .layer--seats {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.theatreSvg[data-mode="seats"] .layer--seats circle[data-section] {
+  opacity: 1;
+}

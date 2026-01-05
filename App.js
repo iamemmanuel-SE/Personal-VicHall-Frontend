@@ -7,6 +7,11 @@ import ForgotPassword from "./ForgotPassword";
 import ResetPassword from "./ResetPassword";
 import VerificationCode from "./VerificationCode";
 import MainPage from "./MainPage";
+import Events from "./Events";
+import CheckoutPage from "./checkoutPage";
+import TicketConfirmation from "./TicketConfirmation";
+import TicketPage from "./TicketPage";
+import AccountPage from "./AccountPage";
 
 function App() {
   return (
@@ -17,8 +22,13 @@ function App() {
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
         <Route path="/reset-password" element={<ResetPassword />} />
-        <Route path="/verify-code" element={<VerificationCode />} />
+        <Route path="/verify" element={<VerificationCode />} />
         <Route path="/mainpage" element={<MainPage />} />
+        <Route path="/events" element={<Events />} />
+        <Route path="/checkout" element={<CheckoutPage />} />
+        <Route path="/confirmation" element={<TicketConfirmation />} />
+        <Route path="/ticket" element={<TicketPage />} />
+        <Route path="/account" element={<AccountPage />} />
       </Routes>
     </BrowserRouter>
   );

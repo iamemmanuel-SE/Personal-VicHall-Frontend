@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./auth.css";
 import loginImg from "./assets/login.jpg";
+import { setSession } from "./auth/authStore";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -27,7 +28,6 @@ export default function Login() {
     setIsSubmitting(true);
 
     try {
-      
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -41,11 +41,14 @@ export default function Login() {
         return;
       }
 
+      setSession({ token: data.token, user: data.user });
 
-      localStorage.setItem("vichall_user", JSON.stringify(data.user));
-
-      // Upon successful login, navigate to main page
-      navigate("/mainpage");
+      // ✅ Redirect admins to admin dashboard
+      if (data.user?.role === "admin") {
+        navigate("/admin");
+      } else {
+        navigate("/mainpage");
+      }
     } catch (err) {
       setFormError("Could not connect to the server. Is your backend running?");
     } finally {
@@ -137,7 +140,11 @@ export default function Login() {
               </div>
             </div>
 
-            <button className="auth-primary-button" type="submit" disabled={isSubmitting}>
+            <button
+              className="auth-primary-button"
+              type="submit"
+              disabled={isSubmitting}
+            >
               {isSubmitting ? "Logging in..." : "Log in"}
             </button>
           </form>

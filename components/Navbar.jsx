@@ -18,9 +18,9 @@ const Navbar = () => {
         <div className={styles.logo}>vicHall.</div>
 
         <ul className={styles.navLinks}>
-          <li>
-            <a href="#home">Home</a>
-          </li>
+          <Link to="/mainpage">
+            <li>Home</li>
+          </Link>
           <li>
             <Link to="/events">Events</Link>
           </li>
@@ -60,13 +60,7 @@ const Navbar = () => {
         </div>
       </div>
 
-      <div className={styles.searchBar}>
-        <div className={styles.searchBg}></div>
-        <div className={styles.searchIconWrapper}>
-          <Search size={16} className={styles.searchIcon} />
-        </div>
-        <span className={styles.searchText}>Search Event</span>
-      </div>
+      
     </nav>
   );
 };

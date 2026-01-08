@@ -12,6 +12,8 @@ import CheckoutPage from "./checkoutPage";
 import TicketConfirmation from "./TicketConfirmation";
 import TicketPage from "./TicketPage";
 import AccountPage from "./AccountPage";
+import AdminDashboard from "./AdminDashboard";
+import AdminEvents from "./AdminEvents";
 
 function App() {
   return (
@@ -29,6 +31,8 @@ function App() {
         <Route path="/confirmation" element={<TicketConfirmation />} />
         <Route path="/ticket" element={<TicketPage />} />
         <Route path="/account" element={<AccountPage />} />
+        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin/events" element={<AdminEvents />} />
       </Routes>
     </BrowserRouter>
   );

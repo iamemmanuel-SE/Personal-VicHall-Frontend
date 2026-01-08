@@ -14,6 +14,7 @@ import TicketPage from "./TicketPage";
 import AccountPage from "./AccountPage";
 import AdminDashboard from "./AdminDashboard";
 import AdminEvents from "./AdminEvents";
+import AdminUsers from "./AdminUsers";
 
 function App() {
   return (
@@ -33,6 +34,7 @@ function App() {
         <Route path="/account" element={<AccountPage />} />
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/admin/events" element={<AdminEvents />} />
+        <Route path="/admin/users" element={<AdminUsers />} />
       </Routes>
     </BrowserRouter>
   );

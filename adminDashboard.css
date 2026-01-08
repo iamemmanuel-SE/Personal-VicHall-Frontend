@@ -1,0 +1,155 @@
+.admin-root {
+  min-height: 100vh;
+  background: #ffffff;
+  color: #111;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+/* Top nav */
+.admin-nav {
+  height: 78px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 0 56px;
+}
+
+.admin-brand {
+  font-weight: 700;
+  font-size: 22px;
+  letter-spacing: 0.2px;
+}
+
+.admin-links {
+  display: flex;
+  gap: 58px;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-link {
+  text-decoration: none;
+  color: #111;
+  font-size: 14px;
+}
+
+.admin-link:hover {
+  opacity: 0.8;
+}
+
+.admin-account-btn {
+  justify-self: end;
+  border: 2px solid #e6e6e6;
+  background: #fff;
+  padding: 8px 18px;
+  border-radius: 999px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.admin-account-btn:hover {
+  background: #fafafa;
+}
+
+/* Main panel */
+.admin-content {
+  padding: 18px 56px 60px;
+}
+
+.admin-shell {
+  max-width: 1400px;
+  margin: 0 auto;
+  background: #f7f7f7;
+  border: 1px solid #d7d7d7;
+  border-radius: 28px;
+  padding: 42px 46px 54px;
+}
+
+.admin-title {
+  margin: 0;
+  text-align: center;
+  font-size: 40px;
+  font-weight: 800;
+}
+
+.admin-subtitle {
+  margin: 10px auto 0;
+  max-width: 720px;
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.45;
+  color: #111;
+}
+
+/* Inner box */
+.admin-inner {
+  margin: 34px auto 0;
+  max-width: 1140px;
+  height: 520px;
+  background: #ffffff;
+  border: 1px solid #d7d7d7;
+  border-radius: 22px;
+  display: grid;
+  place-items: center;
+}
+
+.admin-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Buttons */
+.admin-action-btn {
+  width: 420px;
+  height: 78px;
+  border: none;
+  border-radius: 22px;
+  cursor: pointer;
+
+  color: #fff;
+  font-size: 24px;
+  font-weight: 500;
+
+  background: linear-gradient(180deg, #000000 0%, #101010 100%);
+  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.12);
+}
+
+.admin-action-btn:hover {
+  transform: translateY(-1px);
+}
+
+.admin-action-btn:active {
+  transform: translateY(0px);
+  box-shadow: 0 8px 14px rgba(0, 0, 0, 0.12);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .admin-nav {
+    padding: 0 18px;
+    grid-template-columns: auto 1fr auto;
+  }
+
+  .admin-links {
+    gap: 20px;
+  }
+
+  .admin-content {
+    padding: 12px 18px 40px;
+  }
+
+  .admin-shell {
+    padding: 30px 18px 34px;
+  }
+
+  .admin-inner {
+    height: 420px;
+  }
+
+  .admin-action-btn {
+    width: min(420px, 90vw);
+  }
+}

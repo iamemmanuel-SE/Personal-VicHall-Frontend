@@ -229,4 +229,43 @@
       width: 100%;
     }
   }
-  
+  .vh-hint {
+  margin: 6px 0 0;
+  opacity: 0.7;
+  font-size: 14px;
+}
+
+.vh-error {
+  margin: 6px 0 0;
+  color: #a10000;
+  font-weight: 600;
+  font-size: 14px;
+}
+/* ===== Events page overrides to match Figma ===== */
+
+/* Figma uses a white page background */
+.vh-eventsPage {
+  background: #ffffff;
+}
+
+/* Your Navbar has its own absolute "Search Event" label.
+   Hide it on the Events page so you don't get a duplicate search bar. */
+.vh-eventsPage .searchBar {
+  display: none !important;
+}
+
+/* Match spacing: title sits lower because navbar has top margin */
+.vh-eventsPage .vh-content {
+  padding-top: 40px;
+}
+
+/* Keep list centered like Figma */
+.vh-eventsPage .vh-list {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+/* Optional: slightly stronger title weight like your screenshot */
+.vh-eventsPage .vh-title {
+  font-weight: 700;
+}

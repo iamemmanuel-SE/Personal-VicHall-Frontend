@@ -410,3 +410,43 @@
     grid-column: 1 / 2;
   }
 }
+/* Right side group: trash + action button (Figma) */
+.ae-actionsRight {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* Trash icon button (white circle) */
+.ae-trashBtn {
+  width: 44px;
+  height: 44px;
+  border-radius: 999px;
+  border: none;
+  background: #f2f2f2;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+
+.ae-trashBtn:hover {
+  filter: brightness(0.98);
+}
+
+.ae-trashBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Small error banner under title row */
+.ae-errorBanner {
+  max-width: 1060px;
+  margin: 14px auto 0;
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 0, 0, 0.35);
+  background: rgba(255, 0, 0, 0.06);
+  color: rgba(150, 0, 0, 0.9);
+  font-weight: 600;
+}

@@ -1,3 +1,114 @@
+.wrapper {
+  width: 100%;
+}
+
+/* ===== Best Event For 2025 (DB featured) ===== */
+.featureHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0 20px;
+  margin-top: 4rem;
+  gap: 24px;
+}
+
+.featureTitle {
+  font-family: "Poppins", sans-serif;
+  font-size: 48px;
+  font-weight: 400;
+  line-height: 1.1;
+  margin: 0;
+  color: #000;
+}
+
+.featureSubtitle {
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+  color: #676767;
+  font-weight: 400;
+  line-height: 1.3;
+  margin: 6px 0 0;
+  max-width: 420px;
+  text-align: right;
+}
+
+.featureCard {
+  margin: 18px 20px 0;
+  height: 520px;
+  border-radius: 22px;
+  overflow: hidden;
+  background: #111;
+  background-size: cover;
+  background-position: center;
+  position: relative;
+}
+
+.featureOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.72) 0%,
+    rgba(0, 0, 0, 0.35) 45%,
+    rgba(0, 0, 0, 0.1) 100%
+  );
+}
+
+.featureText {
+  position: absolute;
+  left: 44px;
+  bottom: 44px;
+  z-index: 2;
+  max-width: 520px;
+}
+
+.featureEventName {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-size: 54px;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  color: #fff;
+  margin: 0 0 14px;
+}
+
+.featureEventDesc {
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.25;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 18px;
+  max-width: 520px;
+}
+
+.featureBtn {
+  height: 54px;
+  min-width: 220px;
+  border-radius: 999px;
+  border: none;
+  background: #fff;
+  color: #000;
+  padding: 0 22px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  font-family: "Poppins", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.featureBtn:hover {
+  transform: translateY(-1px);
+}
+
+.featureArrow {
+  font-size: 18px;
+}
+
+/* ===== Existing grid (your original styles) ===== */
 .grid {
   display: flex;
   gap: 20px;
@@ -188,5 +299,32 @@
     padding: 0 20px;
     justify-content: flex-start;
     overflow-x: auto;
+  }
+}
+
+@media (max-width: 900px) {
+  .featureHeader {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .featureSubtitle {
+    text-align: left;
+    max-width: 520px;
+  }
+
+  .featureCard {
+    height: 420px;
+  }
+
+  .featureEventName {
+    font-size: 38px;
+  }
+
+  .featureText {
+    left: 22px;
+    right: 22px;
+    bottom: 22px;
+    max-width: 100%;
   }
 }

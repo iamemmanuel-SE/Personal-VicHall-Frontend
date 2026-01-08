@@ -6,6 +6,18 @@
   margin-top: 4rem;
   width: 100%;
 }
+.sectionHeading {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  font-family: "Poppins", sans-serif;
+  font-weight: 400;
+  font-size: 26px;
+  line-height: 30px;
+  color: #000;
+  margin: 0;
+  z-index: 2; 
+}
 
 .bgText {
   position: absolute;

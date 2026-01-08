@@ -22,7 +22,7 @@ const Hero = () => {
           </h1>
 
           <div className={styles.widgetWrapper}>
-            <BookingWidget />
+
           </div>
         </div>
       </div>

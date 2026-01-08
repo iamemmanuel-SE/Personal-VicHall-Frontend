@@ -1,8 +1,5 @@
-import { ArrowRight, ArrowUpRight, ToggleRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import styles from "./FeatureGrid.module.css";
-import kidsImg from "../assets/feature_kids.png";
-import quoteImg from "../assets/feature_quote.png";
-import ticketImg from "../assets/feature_ticket.png";
 
 const FeatureGrid = () => {
   return (
@@ -11,7 +8,7 @@ const FeatureGrid = () => {
       <div className={`${styles.card} ${styles.cardStarSaver}`}>
         <div className={styles.starSaverContent}>
           <h3>Young Star Saver</h3>
-          <button className={styles.iconBtn}>
+          <button className={styles.iconBtn} type="button">
             <ArrowUpRight size={20} color="black" />
           </button>
         </div>
@@ -47,7 +44,7 @@ const FeatureGrid = () => {
         </p>
         <div className={styles.groupFooter}>
           <h3>Group Bookings</h3>
-          <button className={styles.iconBtn}>
+          <button className={styles.iconBtn} type="button">
             <ArrowUpRight size={20} color="black" />
           </button>
         </div>
@@ -56,7 +53,7 @@ const FeatureGrid = () => {
       {/* Card 4: Loyal Card Members */}
       <div className={`${styles.card} ${styles.cardLoyal}`}>
         <div className={styles.loyalContent}>
-          <button className={styles.iconBtn}>
+          <button className={styles.iconBtn} type="button">
             <ArrowUpRight size={20} color="black" />
           </button>
           <h3>Loyal Card Members</h3>

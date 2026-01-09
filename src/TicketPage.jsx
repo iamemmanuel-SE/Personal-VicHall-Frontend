@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { isLoggedIn, getToken } from "./auth/authStore";
+import { getStoredUser } from "./auth/authStore";
+
 
 import "./ticketPage.css";
 import TheatreMap from "./TheatreMap";
@@ -8,11 +10,16 @@ import TheatreMap from "./TheatreMap";
 export default function TicketPage() {
   const [category, setCategory] = useState("Child");
   const [selectedSeats, setSelectedSeats] = useState([]);
+  const [seatCategories, setSeatCategories] = useState({});
+  
 
   const { eventId } = useParams();
   const [event, setEvent] = useState(null);
   const [loadingEvent, setLoadingEvent] = useState(true);
   const [eventErr, setEventErr] = useState("");
+
+  const user = getStoredUser();
+  const hasLoyalty = Boolean(user?.loyalty?.isMember); // adapt to your real shape
 
 
   const mapApiRef = useRef(null);
@@ -22,6 +29,90 @@ export default function TicketPage() {
   const [bookingErr, setBookingErr] = useState("");
   const [isBooking, setIsBooking] = useState(false);
 
+  const DISCOUNT_RATES = {
+    child: 0.20,   // under 16
+    senior: 0.15,  // over 70
+    adult: 0.0,
+    group: 0.10,   // booking size > 10
+    loyalty: 0.10, // loyalty member
+  };
+  
+  // Example seat/location multipliers (adjust to match your appendix)
+  const LOCATION_MULTIPLIER = {
+    STALLS: 1.0,
+    LBAL: 0.8,
+    RBAL: 0.8,
+    SBALC: 0.7,
+    // add yours...
+  };
+  
+  function seatKey(s) {
+    return `${s.section}-${s.row}-${s.seat}`;
+  }
+  
+  function getLocationMultiplier(section) {
+    return LOCATION_MULTIPLIER[section] ?? 1.0;
+  }
+  
+  function bestDiscountRate({ category, partySize, hasLoyalty }) {
+    const rates = [];
+  
+    if (category === "child") rates.push(DISCOUNT_RATES.child);
+    if (category === "senior") rates.push(DISCOUNT_RATES.senior);
+    if (partySize > 10) rates.push(DISCOUNT_RATES.group);
+    if (hasLoyalty) rates.push(DISCOUNT_RATES.loyalty);
+  
+    return rates.length ? Math.max(...rates) : 0;
+  }
+  
+  function calcTicketPrice({ baseCost, section, category, partySize, hasLoyalty }) {
+    const fullPrice = +(Number(baseCost || 0) * getLocationMultiplier(section)).toFixed(2);
+    const rate = bestDiscountRate({ category, partySize, hasLoyalty });
+    const finalPrice = +(fullPrice * (1 - rate)).toFixed(2);
+  
+    return {
+      fullPrice,
+      discountRate: rate,
+      finalPrice,
+      discountAmount: +(fullPrice - finalPrice).toFixed(2),
+    };
+  }
+  
+
+  const setCategoryForSeat = (seat, newCategory) => {
+    const k = seatKey(seat);
+  
+    setSeatCategories((prev) => ({ ...prev, [k]: newCategory }));
+  
+    setSelectedSeats((prev) => {
+      const partySize = prev.length;
+  
+      return prev.map((s) => {
+        if (seatKey(s) !== k) return s;
+  
+        const baseCost = Number(s.baseCost ?? s.price) || 0;
+        const { fullPrice, discountRate, finalPrice, discountAmount } =
+          calcTicketPrice({
+            baseCost,
+            section: s.section,
+            category: newCategory,
+            partySize,
+            hasLoyalty,
+          });
+  
+        return {
+          ...s,
+          category: newCategory,
+          baseCost,
+          fullPrice,
+          discountRate,
+          discountAmount,
+          price: finalPrice,
+        };
+      });
+    });
+  };
+  
 
   // const removeSeat = (seatToRemove) => {
   //   setSelectedSeats((prev) =>
@@ -86,6 +177,7 @@ export default function TicketPage() {
             row: s.row,
             seat: s.seat,
             category: s.category || "adult", // THIS is the fix.
+            baseCost: Number(s.baseCost ?? s.basePrice) || 0, // important
           })),
         };
       };
@@ -212,15 +304,48 @@ export default function TicketPage() {
         <div className="mapWrap">
           <TheatreMap 
           mapApiRef={mapApiRef}
-              maxSeats={10}
-              onSeatSelect={(seatsArray) => 
-                setSelectedSeats(
-                  (seatsArray || []).map((s) => ({
-                    ...s,
-                    category: s.category || "adult", // per-seat category
-                  }))
-                )
-              }
+          onSeatSelect={(seatsArray) => {
+            console.log("SEAT OBJ EXAMPLE:", seatsArray?.[0]);
+            const seats = seatsArray || [];
+          
+            // default category for new seats
+            const nextCats = { ...seatCategories };
+            seats.forEach((s) => {
+              const k = seatKey(s);
+              if (!nextCats[k]) nextCats[k] = "adult";
+            });
+            setSeatCategories(nextCats);
+          
+            const partySize = seats.length;
+          
+            const enriched = seats.map((s) => {
+              const k = seatKey(s);
+              const category = nextCats[k]; // "child" | "senior" | "adult"
+              const baseCost = Number(s.basePrice ?? s.price) || 0;
+          
+              const { fullPrice, discountRate, finalPrice, discountAmount } =
+                calcTicketPrice({
+                  baseCost,
+                  section: s.section,
+                  category,
+                  partySize,
+                  hasLoyalty,
+                });
+          
+              return {
+                ...s,
+                baseCost,
+                category,
+                fullPrice,
+                discountRate,
+                discountAmount,
+                price: finalPrice, //final per-ticket price
+              };
+            });
+          
+            setSelectedSeats(enriched);
+          }}
+          
           />
 
           <div className="mapControls" aria-hidden="true">

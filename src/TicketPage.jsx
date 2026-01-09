@@ -222,7 +222,8 @@ export default function TicketPage() {
       
           // booking successful -> move to checkout or confirmation
           // choose one:
-          navigate("/checkout", { state: { booking: data } });
+          navigate("/checkout", { state: { booking: data.booking, loyalty: data.loyalty } });
+
           // OR: navigate("/confirmation", { state: { booking: data } });
       
         } catch (e) {

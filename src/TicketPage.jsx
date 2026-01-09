@@ -85,7 +85,7 @@ export default function TicketPage() {
             section: s.section,
             row: s.row,
             seat: s.seat,
-            category: s.category || "adult", // THIS is the fix
+            category: s.category || "adult", // THIS is the fix.
           })),
         };
       };

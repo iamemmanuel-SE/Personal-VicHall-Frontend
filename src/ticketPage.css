@@ -1,133 +1,140 @@
 /* Page shell */
 .ticket-page {
-    padding: 22px 28px 40px;
-    background: #ffffff;
-    font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-    color: #111;
-  }
-  
-  /* HERO */
-  .hero {
-    display: grid;
-    grid-template-columns: 240px 1fr auto;
-    gap: 18px;
-    align-items: center;
-  
-    background: #1e1f21;
-    border-radius: 28px;
-    padding: 18px;
-    margin-bottom: 26px;
-  }
-  
-  .hero__img {
-    height: 140px;
-    border-radius: 22px;
-    background:
-      linear-gradient(180deg, rgba(0,0,0,0.15), rgba(0,0,0,0.55)),
-      url("https://images.unsplash.com/photo-1521337581100-8ca9a73a5b88?auto=format&fit=crop&w=800&q=60");
-    background-size: cover;
-    background-position: center;
-  }
-  
-  .hero__content {
-    min-width: 0;
-  }
-  
-  .hero__title {
-    margin: 0 0 8px;
-    color: #fff;
-    font-size: 46px;
-    line-height: 1;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-  }
-  
-  .hero__meta {
-    color: rgba(255,255,255,0.82);
-    font-size: 14px;
-    line-height: 1.35;
-    margin-bottom: 14px;
-  }
-  
-  .hero__actions {
-    display: flex;
-    justify-content: flex-end;
-    align-self: start;
-  }
-  
-  /* Buttons */
-  .btn {
-    border: 0;
-    cursor: pointer;
-    border-radius: 999px;
-    padding: 10px 14px;
-    font-weight: 600;
-    font-size: 14px;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    user-select: none;
-  }
-  
-  .btn:focus {
-    outline: 2px solid rgba(255,255,255,0.65);
-    outline-offset: 2px;
-  }
-  
-  .btn--ghost {
-    background: transparent;
-    color: #fff;
-    border: 1px solid rgba(255,255,255,0.55);
-  }
-  
-  .btn--ghost:hover {
-    border-color: rgba(255,255,255,0.9);
-  }
-  
-  .btn--primary {
-    background: #1e1f21;
-    color: #fff;
-  }
-  
-  .btn--primary:hover {
-    filter: brightness(1.05);
-  }
-  
-  .btn--sm {
-    padding: 8px 12px;
-    font-size: 13px;
-  }
-  
-  .btn--big {
-    width: 100%;
-    padding: 16px 18px;
-    border-radius: 22px;
-    font-size: 16px;
-    font-weight: 800;
-  }
-  
-  .btn__icon {
-    width: 18px;
-    height: 18px;
-    display: inline-grid;
-    place-items: center;
-    border-radius: 50%;
-    border: 1px solid rgba(255,255,255,0.55);
-    font-size: 12px;
-  }
-  
-  /* MAIN LAYOUT */
-  .main {
-    display: grid;
-    grid-template-columns: 1.6fr 0.95fr;
-    gap: 26px;
-    align-items: start;
-  }
-  
-  /* LEFT MAP */
-  /* TicketPage: map container */
+  padding: 22px 28px 40px;
+  background: #ffffff;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color: #111;
+
+  /* ✅ STOP the page from stretching too wide */
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* HERO */
+.hero {
+  display: grid;
+  grid-template-columns: 240px 1fr auto;
+  gap: 18px;
+  align-items: center;
+
+  background: #1e1f21;
+  border-radius: 28px;
+  padding: 18px;
+  margin-bottom: 26px;
+}
+
+.hero__img {
+  height: 140px;
+  border-radius: 22px;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,0.15), rgba(0,0,0,0.55)),
+    url("https://images.unsplash.com/photo-1521337581100-8ca9a73a5b88?auto=format&fit=crop&w=800&q=60");
+  background-size: cover;
+  background-position: center;
+}
+
+.hero__content {
+  min-width: 0;
+}
+
+.hero__title {
+  margin: 0 0 8px;
+  color: #fff;
+  font-size: 46px;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.hero__meta {
+  color: rgba(255,255,255,0.82);
+  font-size: 14px;
+  line-height: 1.35;
+  margin-bottom: 14px;
+}
+
+.hero__actions {
+  display: flex;
+  justify-content: flex-end;
+  align-self: start;
+}
+
+/* Buttons */
+.btn {
+  border: 0;
+  cursor: pointer;
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-weight: 600;
+  font-size: 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  user-select: none;
+}
+
+.btn:focus {
+  outline: 2px solid rgba(255,255,255,0.65);
+  outline-offset: 2px;
+}
+
+.btn--ghost {
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.55);
+}
+
+.btn--ghost:hover {
+  border-color: rgba(255,255,255,0.9);
+}
+
+.btn--primary {
+  background: #1e1f21;
+  color: #fff;
+}
+
+.btn--primary:hover {
+  filter: brightness(1.05);
+}
+
+.btn--sm {
+  padding: 8px 12px;
+  font-size: 13px;
+}
+
+.btn--big {
+  width: 100%;
+  padding: 16px 18px;
+  border-radius: 22px;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.btn__icon {
+  width: 18px;
+  height: 18px;
+  display: inline-grid;
+  place-items: center;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.55);
+  font-size: 12px;
+}
+
+/* MAIN LAYOUT */
+.main {
+  display: grid;
+  grid-template-columns: 1.6fr 0.95fr;
+  gap: 26px;
+
+  /* ✅ keeps map + panel same row height */
+  align-items: stretch;
+}
+
+/* LEFT MAP */
 .mapWrap {
   position: relative;
+  width: 100%;
   height: 520px;
   border-radius: 18px;
   background: #f2f2f2;
@@ -135,332 +142,242 @@
   overflow: hidden;
 }
 
-  
-  .mapPlaceholder {
-    position: relative;
-    height: 520px;
-    border-radius: 18px;
-    background: #f2f2f2;
-    border: 1px solid #e6e6e6;
-    overflow: hidden;
-  }
-  
-  .mapPlaceholder__note {
-    position: absolute;
-    inset: 0;
-    display: grid;
-    place-items: center;
-    color: #666;
-    font-weight: 600;
-  }
-  
-  /* mimic zoom buttons on the right */
-  .mapControls {
-    position: absolute;
-    top: 14px;
-    right: 14px;
-    display: grid;
-    gap: 8px;
-  }
-  
-  .mapControls__btn {
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
-    border: 1px solid #ddd;
-    background: #fff;
-    cursor: default;
-    font-weight: 900;
-  }
-  
-  /* RIGHT PANEL */
-  .panel {
-    border: 2px solid #bdbdbd;
-    border-radius: 26px;
-    padding: 14px;
-    background: #fff;
-  }
-  
-  .panel__header {
-    width: 100%;
-    text-align: center;
-    font-weight: 800;
-    background: #1e1f21;
-    color: #fff;
-    border-radius: 18px;
-    padding: 10px 12px;
-    margin-bottom: 12px;
-  }
-  
-  .panel__card {
-    background: #1e1f21;
-    color: #fff;
-    border-radius: 20px;
-    padding: 14px 14px 12px;
-  }
-  
-  .panel__title {
-    text-align: center;
-    font-weight: 800;
-    font-size: 16px;
-    margin-bottom: 10px;
-  }
-  
-  .panel__subTitle {
-    font-weight: 700;
-    margin: 10px 0 10px;
-  }
-  
-  /* Dividers */
-  .divider {
-    height: 2px;
-    background: rgba(255,255,255,0.35);
-    border-radius: 999px;
-  }
-  
-  .divider--thin {
-    height: 1px;
-    background: rgba(255,255,255,0.28);
-  }
-  
-  /* Section/Row/Seat triplet */
-  .triplet {
-    display: grid;
-    grid-template-columns: 1fr 2px 1fr 2px 1fr;
-    gap: 10px;
-    align-items: center;
-    padding: 12px 0;
-  }
-  
-  .triplet__item {
-    display: grid;
-    gap: 6px;
-  }
-  
-  .triplet__label {
-    font-size: 13px;
-    opacity: 0.85;
-  }
-  
-  .triplet__value {
-    font-size: 16px;
-    font-weight: 800;
-  }
-  
-  .triplet__pipe {
-    width: 2px;
-    height: 38px;
-    background: rgba(255,255,255,0.35);
-    border-radius: 999px;
-  }
-  
-  /* Category row */
-  .categoryRow {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    padding: 12px 0;
-  }
-  
-  .categoryRow__label {
-    font-size: 13px;
-    font-weight: 700;
-    opacity: 0.95;
-  }
-  
-  .pillGroup {
-    display: flex;
-    gap: 10px;
-  }
-  
-  .pill {
-    border: 1px solid rgba(255,255,255,0.55);
-    background: transparent;
-    color: #fff;
-    padding: 7px 12px;
-    border-radius: 999px;
-    font-weight: 700;
-    font-size: 13px;
-    cursor: pointer;
-  }
-  
-  .pill:hover {
-    border-color: rgba(255,255,255,0.9);
-  }
-  
-  .pill--active {
-    background: #ffffff;
-    color: #111;
-    border-color: #ffffff;
-  }
-  
-  /* Price + remove */
-  .priceRow {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-    padding-top: 10px;
-  }
-  
-  .priceRow__price {
-    font-weight: 900;
-    font-size: 16px;
-  }
-  
-  /* Panel footer (qty + big button) */
-  .panel__footer {
-    margin-top: 16px;
-    display: grid;
-    gap: 18px;
-  }
-  
-  .qtyChip {
-    width: fit-content;
-    background: #1e1f21;
-    color: #fff;
-    border-radius: 12px;
-    padding: 6px 10px;
-    font-weight: 800;
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-  }
-  
-  .qtyChip__icon {
-    filter: grayscale(1);
-  }
+.mapControls {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: grid;
+  gap: 8px;
+  z-index: 50;
+  pointer-events: auto;
+}
 
-  .theatreSvg {
-    width: 100%;
-    height: 100%;
-    display: block;
-    cursor: grab;
-  }
-  
-  .theatreSvg:active {
-    cursor: grabbing;
-  }
-  
-  /* panel layout: header fixed, footer fixed, middle scrolls */
+
+/*  Force the TheatreMap root to fill the wrapper
+.mapWrap > * {
+  width: 100%;
+  height: 100%;
+} */
+
+/* mimic zoom buttons on the right */
+.mapControls {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  display: grid;
+  gap: 8px;
+  z-index: 5;
+}
+
+.mapControls__btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  background: #fff;
+  cursor: pointer;
+  font-weight: 900;
+}
+
+/* SVG sizing */
+.theatreSvg,
+.mapWrap svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* RIGHT PANEL */
 .panel {
+  border: 2px solid #bdbdbd;
+  border-radius: 26px;
+  padding: 14px;
+  background: #fff;
+
+  /* ✅ lock panel height to match map */
+  height: 520px;
   display: flex;
   flex-direction: column;
-  height: 100%;
+  overflow: hidden;
 }
 
-/* this is the scroll container for multiple cards */
+.panel__header {
+  width: 100%;
+  text-align: center;
+  font-weight: 800;
+  background: #1e1f21;
+  color: #fff;
+  border-radius: 18px;
+  padding: 10px 12px;
+  margin-bottom: 12px;
+  flex: 0 0 auto;
+}
+
 .panel__list {
-  flex: 1;
+  flex: 1 1 auto;
   overflow-y: auto;
-  padding-right: 6px; /* optional, prevents scrollbar overlay */
+
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  padding-right: 6px;
 }
 
-/* optional: empty state */
 .panel__empty {
   padding: 14px;
   color: #777;
   font-size: 14px;
 }
 
-/* optional: total line */
+.panel__card {
+  background: #1e1f21;
+  color: #fff;
+  border-radius: 20px;
+  padding: 14px 14px 12px;
+}
+
+.panel__title {
+  text-align: center;
+  font-weight: 800;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.panel__subTitle {
+  font-weight: 700;
+  margin: 10px 0 10px;
+}
+
+/* Dividers */
+.divider {
+  height: 2px;
+  background: rgba(255,255,255,0.35);
+  border-radius: 999px;
+}
+
+.divider--thin {
+  height: 1px;
+  background: rgba(255,255,255,0.28);
+}
+
+/* Section/Row/Seat triplet */
+.triplet {
+  display: grid;
+  grid-template-columns: 1fr 2px 1fr 2px 1fr;
+  gap: 10px;
+  align-items: center;
+  padding: 12px 0;
+}
+
+.triplet__item {
+  display: grid;
+  gap: 6px;
+}
+
+.triplet__label {
+  font-size: 13px;
+  opacity: 0.85;
+}
+
+.triplet__value {
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.triplet__pipe {
+  width: 2px;
+  height: 38px;
+  background: rgba(255,255,255,0.35);
+  border-radius: 999px;
+}
+
+/* Price + remove */
+.priceRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 10px;
+}
+
+.priceRow__price {
+  font-weight: 900;
+  font-size: 16px;
+}
+
+/* Panel footer */
+.panel__footer {
+  flex: 0 0 auto;
+  margin-top: 16px;
+  display: grid;
+  gap: 18px;
+}
+
+.qtyChip {
+  width: fit-content;
+  background: #1e1f21;
+  color: #fff;
+  border-radius: 12px;
+  padding: 6px 10px;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.qtyChip__icon {
+  filter: grayscale(1);
+}
+
 .panel__total {
   margin: 10px 0;
   font-weight: 700;
 }
 
-/* Make left + right columns same height */
-.main {
-  align-items: stretch; /* ✅ important */
-}
-
-/* Fix the panel height so it NEVER grows */
-.panel {
-  display: flex;
-  flex-direction: column;
-  height: 520px;          /* ✅ match your mapWrap height */
-  overflow: hidden;       /* ✅ prevents panel growing visually */
-}
-
-/* Header should NEVER scroll */
-.panel__header {
-  flex: 0 0 auto;
-}
-
-/* Footer should NEVER scroll */
-.panel__footer {
-  flex: 0 0 auto;
-  margin-top: 16px;
-}
-
-/* This is the ONLY scroll area */
-.panel__list {
-  flex: 1 1 auto;
-  overflow-y: auto;
-
-  /*spacing between cards */
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-
-  /* optional */
-  padding-right: 6px;  /* avoids scrollbar overlay */
-}
-
-/* Optional empty state */
-.panel__empty {
-  padding: 14px;
-  color: #777;
-  font-size: 14px;
-}
-
-
-  /* Responsive */
-  @media (max-width: 1060px) {
-    .hero {
-      grid-template-columns: 200px 1fr;
-      grid-template-areas:
-        "img content"
-        "actions actions";
-    }
-  
-    .hero__img { grid-area: img; }
-    .hero__content { grid-area: content; }
-    .hero__actions { grid-area: actions; justify-content: flex-start; }
-  
-    .main {
-      grid-template-columns: 1fr;
-    }
-  
-    .mapPlaceholder {
-      height: 420px;
-    }
+/* Responsive */
+@media (max-width: 1060px) {
+  .hero {
+    grid-template-columns: 200px 1fr;
+    grid-template-areas:
+      "img content"
+      "actions actions";
   }
-  
-  @media (max-width: 640px) {
-    .ticket-page { padding: 16px; }
-  
-    .hero__title {
-      font-size: 34px;
-    }
-  
-    .hero__img {
-      height: 110px;
-    }
-  
-    .triplet {
-      grid-template-columns: 1fr;
-      gap: 8px;
-    }
-  
-    .triplet__pipe {
-      display: none;
-    }
-  
-    .categoryRow {
-      flex-direction: column;
-      align-items: flex-start;
-    }
+
+  .hero__img { grid-area: img; }
+  .hero__content { grid-area: content; }
+  .hero__actions { grid-area: actions; justify-content: flex-start; }
+
+  .main {
+    grid-template-columns: 1fr;
   }
-  
+
+  .mapWrap {
+    height: 420px;
+  }
+
+  .panel {
+    height: 420px;
+  }
+}
+
+@media (max-width: 640px) {
+  .ticket-page { padding: 16px; }
+
+  .hero__title {
+    font-size: 34px;
+  }
+
+  .hero__img {
+    height: 110px;
+  }
+
+  .triplet {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .triplet__pipe {
+    display: none;
+  }
+}

@@ -1,6 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import "./events.css";
 import Navbar from "./components/Navbar";
+import { useNavigate } from "react-router-dom";
+
 
 async function fetchEventsApi() {
   const res = await fetch("http://localhost:5001/api/events");
@@ -10,10 +12,17 @@ async function fetchEventsApi() {
 }
 
 export default function Events() {
+  const navigate = useNavigate();
   const [q, setQ] = useState("");
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState("");
+  
+
+  const handleFindTicket = (eventId) => {
+    navigate(`/ticket/${eventId}`);
+  };
+  
 
   useEffect(() => {
     let alive = true;
@@ -84,6 +93,7 @@ export default function Events() {
 
         <div className="vh-list">
           {filtered.map((e) => (
+          
             <div className="vh-card" key={e._id}>
               <div className="vh-datePill">
                 <div className="vh-dateTop">{e.dateLabel}</div>
@@ -95,7 +105,11 @@ export default function Events() {
                 <p>{e.description}</p>
               </div>
 
-              <button className="vh-findBtn" type="button">
+              <button 
+                className="vh-findBtn" 
+                type="button"
+                onClick={() => handleFindTicket(e._id)}
+                >
                 Find ticket
               </button>
             </div>

@@ -17,6 +17,8 @@ import AdminEvents from "./AdminEvents";
 import AdminUsers from "./AdminUsers";
 
 function App() {
+
+
   return (
     <BrowserRouter>
       <Routes>
@@ -30,7 +32,7 @@ function App() {
         <Route path="/events" element={<Events />} />
         <Route path="/checkout" element={<CheckoutPage />} />
         <Route path="/confirmation" element={<TicketConfirmation />} />
-        <Route path="/ticket" element={<TicketPage />} />
+        <Route path="/ticket/:eventId" element={<TicketPage />} />
         <Route path="/account" element={<AccountPage />} />
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/admin/events" element={<AdminEvents />} />
@@ -41,3 +43,4 @@ function App() {
 }
 
 export default App;
+// original

@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./events.css";
 import Navbar from "./components/Navbar";
 
@@ -10,10 +11,18 @@ async function fetchEventsApi() {
 }
 
 export default function Events() {
+  
   const [q, setQ] = useState("");
   const [events, setEvents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [err, setErr] = useState("");
+
+  const navigate = useNavigate();
+
+  const handleFindTicket = (id) => {
+    navigate(`/ticket/${id}`);
+  };
+
 
   useEffect(() => {
     let alive = true;
@@ -95,7 +104,11 @@ export default function Events() {
                 <p>{e.description}</p>
               </div>
 
-              <button className="vh-findBtn" type="button">
+              <button
+               className="vh-findBtn"
+                type="button"
+                onClick={() => handleFindTicket(e._id)}
+                >
                 Find ticket
               </button>
             </div>
@@ -105,3 +118,4 @@ export default function Events() {
     </div>
   );
 }
+//original

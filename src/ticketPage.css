@@ -270,6 +270,51 @@
   padding: 12px 0;
 }
 
+/* ✅ CATEGORY (Choose Category) */
+.categoryRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 0;
+}
+
+.categoryRow__label {
+  font-size: 13px;
+  font-weight: 700;
+  opacity: 0.95;
+  color: #fff; /* inside dark card */
+}
+
+.pillGroup {
+  display: flex;
+  gap: 10px;
+  flex-wrap: nowrap;
+}
+
+.pill {
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  background: transparent;
+  color: #fff;
+  padding: 7px 12px;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.pill:hover {
+  border-color: rgba(255, 255, 255, 0.9);
+}
+
+.pill--active {
+  background: #ffffff;
+  color: #111;
+  border-color: #ffffff;
+}
+
+
 .triplet__item {
   display: grid;
   gap: 6px;

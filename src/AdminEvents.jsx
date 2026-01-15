@@ -17,7 +17,7 @@ async function deleteEventApi(eventId) {
   const token = getToken();
   if (!token) throw new Error("Missing auth token.");
 
-  const res = await fetch(`https://vichall-api-12345-47a91ff28cfc.herokuapp.com/api/events/${eventId}`, {
+  const res = await fetch(`/api/events/${eventId}`, {
     method: "DELETE",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -106,7 +106,7 @@ function AddEventModal({ open, onClose, onCreated }) {
       }
   
       // SEND MULTIPART REQUEST
-      const res = await fetch("https://vichall-api-12345-47a91ff28cfc.herokuapp.com/api/events/postevent", {
+      const res = await fetch("/api/events/postevent", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`, // ❗ DO NOT set Content-Type
@@ -131,7 +131,7 @@ function AddEventModal({ open, onClose, onCreated }) {
   //     setSubmitting(true);
   //     const token = getToken();
 
-  //     const res = await fetch("https://vichall-api-12345-47a91ff28cfc.herokuapp.com/api/events/postevent", {
+  //     const res = await fetch("/api/events/postevent", {
   //       method: "POST",
   //       headers: {
   //         "Content-Type": "application/json",
@@ -303,7 +303,7 @@ export default function AdminEvents() {
     if (!token) throw new Error("Missing auth token.");
   
     const res = await fetch(
-      `https://vichall-api-12345-47a91ff28cfc.herokuapp.com/api/admin/events/${selectedEvent._id}/reserve-seat`,
+      `/api/admin/events/${selectedEvent._id}/reserve-seat`,
       {
         method: "POST",
         headers: {

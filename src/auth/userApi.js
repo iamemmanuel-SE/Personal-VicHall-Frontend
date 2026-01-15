@@ -4,7 +4,7 @@ export async function fetchMe() {
   const token = getToken();
   if (!token) throw new Error("Missing token");
 
-  const res = await fetch("/api/auth/me", {
+  const res = await fetch("https://vichall-api-12345-47a91ff28cfc.herokuapp.com/api/auth/me", {
     headers: { Authorization: `Bearer ${token}` },
   });
 

@@ -100,7 +100,7 @@ const SeekrPay = () => {
       setIsProcessingPayment(true);
   
       const token = getToken();
-      const res = await fetch("/api/payments/mock", {
+      const res = await fetch("https://vichall-api-12345-47a91ff28cfc.herokuapp.com/api/payments/mock", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -161,7 +161,7 @@ const SeekrPay = () => {
       try {
         if (!booking?.event) return;
 
-        const res = await fetch(`/api/events/${booking.event}`);
+        const res = await fetch(`https://vichall-api-12345-47a91ff28cfc.herokuapp.com/api/events/${booking.event}`);
         if (!res.ok) return;
 
         const data = await res.json();

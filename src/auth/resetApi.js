@@ -18,17 +18,17 @@ async function post(path, body) {
 }
 
 export function startPasswordReset(email) {
-  return post("/api/auth/forgot-password", { email });
+  return post("https://vichall-api-12345-47a91ff28cfc.herokuapp.com/api/auth/forgot-password", { email });
 }
 
 export function resendResetCode(email) {
-  return post("/api/auth/resend-reset-code", { email });
+  return post("https://vichall-api-12345-47a91ff28cfc.herokuapp.com/api/auth/resend-reset-code", { email });
 }
 
 export function verifyResetCode(email, code) {
-  return post("/api/auth/verify-reset-code", { email, code });
+  return post("https://vichall-api-12345-47a91ff28cfc.herokuapp.com/api/auth/verify-reset-code", { email, code });
 }
 
 export function resetPassword(email, resetToken, newPassword) {
-  return post("/api/auth/reset-password", { email, resetToken, newPassword });
+  return post("https://vichall-api-12345-47a91ff28cfc.herokuapp.com/api/auth/reset-password", { email, resetToken, newPassword });
 }

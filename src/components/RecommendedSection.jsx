@@ -15,7 +15,7 @@ function shuffle(arr) {
 }
 
 async function fetchAllEvents() {
-  const res = await fetch(`/api/events`, { credentials: "include" });
+  const res = await fetch(`https://vichall-api-12345-47a91ff28cfc.herokuapp.com/api/events`, { credentials: "include" });
   const data = await res.json().catch(() => []);
   if (!res.ok) throw new Error(data?.message || "Failed to fetch events");
   return Array.isArray(data) ? data : [];

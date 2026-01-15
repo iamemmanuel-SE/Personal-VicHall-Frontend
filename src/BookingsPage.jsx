@@ -63,7 +63,7 @@ export default function BookingsPage() {
         const token = getToken();
         if (!token) throw new Error("You must be logged in to view bookings.");
 
-        const res = await fetch("/api/bookings/paid", {
+        const res = await fetch("https://vichall-api-12345-47a91ff28cfc.herokuapp.com/api/bookings/paid", {
           headers: { Authorization: `Bearer ${token}` },
           credentials: "include",
         });

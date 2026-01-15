@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 
 async function fetchEventsApi() {
-  const res = await fetch("/api/events");
+  const res = await fetch("https://vichall-api-12345-47a91ff28cfc.herokuapp.com/api/events");
   const data = await res.json().catch(() => []);
   if (!res.ok) throw new Error(data.message || "Failed to fetch events.");
   return Array.isArray(data) ? data : [];

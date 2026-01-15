@@ -19,7 +19,7 @@ const TicketConfirmation = () => {
       if (booking) return;
 
       try {
-        const res = await fetch(`/api/bookings/${bookingId}`);
+        const res = await fetch(`https://vichall-api-12345-47a91ff28cfc.herokuapp.com/api/bookings/${bookingId}`);
         if (!res.ok) throw new Error("Failed to load booking");
         const data = await res.json();
 
@@ -29,7 +29,7 @@ const TicketConfirmation = () => {
         // fetch event if needed
         const eventId = loadedBooking?.event;
         if (eventId) {
-          const er = await fetch(`/api/events/${eventId}`);
+          const er = await fetch(`https://vichall-api-12345-47a91ff28cfc.herokuapp.com/api/events/${eventId}`);
           if (er.ok) setEvent(await er.json());
         }
 

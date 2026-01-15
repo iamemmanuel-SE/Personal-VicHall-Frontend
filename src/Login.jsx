@@ -28,7 +28,7 @@ export default function Login() {
     setIsSubmitting(true);
 
     try {
-      const res = await fetch("/api/auth/login", {
+      const res = await fetch("https://personal-vic-hall-frontend.vercel.apphttps://vichall-api-12345-47a91ff28cfc.herokuapp.com/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),

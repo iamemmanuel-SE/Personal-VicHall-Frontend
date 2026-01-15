@@ -132,7 +132,7 @@ const setCategoryForSeat = (seat, newCategory) => {
         setLoadingEvent(true);
         setEventErr("");
   
-        const res = await fetch(`/api/events/${eventId}`);
+        const res = await fetch(`https://vichall-api-12345-47a91ff28cfc.herokuapp.com/api/events/${eventId}`);
         if (!res.ok) throw new Error("Failed to load event");
   
         const data = await res.json();
@@ -207,7 +207,7 @@ const setCategoryForSeat = (seat, newCategory) => {
           const token = getToken();
           const payload = buildBookingPayload();
       
-          const res = await fetch("/api/bookings", {
+          const res = await fetch("https://vichall-api-12345-47a91ff28cfc.herokuapp.com/api/bookings", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",

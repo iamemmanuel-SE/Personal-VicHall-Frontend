@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react";
 import styles from "./EventSection.module.css";
 import { resolveEventImage } from "../utils/eventImages";
 
-const API_BASE = "http://localhost:5001";
+// const API_BASE = "http://localhost:5001";
 
 function normalizeTitle(s = "") {
   return s
@@ -14,11 +14,12 @@ function normalizeTitle(s = "") {
 }
 
 async function fetchAllEvents() {
-  const res = await fetch(`${API_BASE}/api/events`, { credentials: "include" });
+  const res = await fetch(`/api/events`, { credentials: "include" });
   const data = await res.json().catch(() => []);
   if (!res.ok) throw new Error(data?.message || "Failed to fetch events");
   return Array.isArray(data) ? data : [];
 }
+
 
 const EventSection = () => {
   const [featured, setFeatured] = useState(null);

@@ -3,7 +3,7 @@ import styles from "./RecommendedSection.module.css";
 import { ArrowRight } from "lucide-react";
 import { resolveEventImage } from "../utils/eventImages";
 
-const API_BASE = "http://localhost:5001";
+// const API_BASE = "http://localhost:5001";
 
 function shuffle(arr) {
   const a = [...arr];
@@ -15,7 +15,7 @@ function shuffle(arr) {
 }
 
 async function fetchAllEvents() {
-  const res = await fetch(`${API_BASE}/api/events`, { credentials: "include" });
+  const res = await fetch(`/api/events`, { credentials: "include" });
   const data = await res.json().catch(() => []);
   if (!res.ok) throw new Error(data?.message || "Failed to fetch events");
   return Array.isArray(data) ? data : [];

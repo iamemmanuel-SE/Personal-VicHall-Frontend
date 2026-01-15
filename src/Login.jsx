@@ -43,7 +43,7 @@ export default function Login() {
 
       setSession({ token: data.token, user: data.user });
 
-      // ✅ Redirect admins to admin dashboard
+      // Redirect admins to admin dashboard
       if (data.user?.role === "admin") {
         navigate("/admin");
       } else {
@@ -153,3 +153,4 @@ export default function Login() {
     </div>
   );
 }
+//MAIN

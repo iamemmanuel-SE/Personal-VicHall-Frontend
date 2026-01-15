@@ -22,6 +22,10 @@
 }
 
 .adminNav__links a {
+  cursor: pointer;
+}
+
+.adminNav__links a {
   text-decoration: none;
   color: #111;
   font-size: 14px;

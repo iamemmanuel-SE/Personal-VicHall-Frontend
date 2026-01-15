@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route} from "react-router-dom";
 import "./App.css";
 
-import SignUpPage from "./SignUpPage";
+import SignUpPage from "./SignUpPage.jsx";
 import Login from "./Login";
 import ForgotPassword from "./ForgotPassword";
 import ResetPassword from "./ResetPassword";
@@ -15,6 +15,8 @@ import AccountPage from "./AccountPage";
 import AdminDashboard from "./AdminDashboard";
 import AdminEvents from "./AdminEvents";
 import AdminUsers from "./AdminUsers";
+import BookingsPage from "./BookingsPage.jsx";
+import AdminAccountPage from "./AdminAccountPage.jsx"
 
 function App() {
   return (
@@ -29,15 +31,19 @@ function App() {
         <Route path="/mainpage" element={<MainPage />} />
         <Route path="/events" element={<Events />} />
         <Route path="/checkout" element={<CheckoutPage />} />
-        <Route path="/confirmation" element={<TicketConfirmation />} />
+        <Route path="/ticket-confirmation/:bookingId" element={<TicketConfirmation />} />
         <Route path="/ticket/:eventId" element={<TicketPage />} />
         <Route path="/account" element={<AccountPage />} />
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/admin/events" element={<AdminEvents />} />
         <Route path="/admin/users" element={<AdminUsers />} />
+        <Route path="/bookings" element={<BookingsPage />} />
+        <Route path="/admin/account" element={<AdminAccountPage />} />
+        
       </Routes>
     </BrowserRouter>
   );
 }
 
 export default App;
+//MAIN

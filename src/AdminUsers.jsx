@@ -9,7 +9,7 @@ async function fetchUsersApi() {
   const token = getToken();
   if (!token) throw new Error("Missing auth token.");
 
-  const res = await fetch("http://localhost:5001/api/admin/users", {
+  const res = await fetch("/api/admin/users", {
     headers: { Authorization: `Bearer ${token}` },
     credentials: "include",
   });
@@ -23,7 +23,7 @@ async function deleteUserApi(userId) {
   const token = getToken();
   if (!token) throw new Error("Missing auth token.");
 
-  const res = await fetch(`http://localhost:5001/api/admin/users/${userId}`, {
+  const res = await fetch(`/api/admin/users/${userId}`, {
     method: "DELETE",
     headers: { Authorization: `Bearer ${token}` },
     credentials: "include",
@@ -254,3 +254,4 @@ function TrashIcon() {
     </svg>
   );
 }
+//MAIN

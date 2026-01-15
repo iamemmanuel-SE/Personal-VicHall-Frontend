@@ -51,67 +51,66 @@ export default function TicketPage() {
   }
   
   function getLocationMultiplier(section) {
-    return LOCATION_MULTIPLIER[section] ?? 1.0;
+    return 1.0; // ✅ multiplier disabled (each seat already has its own price)
   }
+  
+  // function getLocationMultiplier(section) {
+  //   return LOCATION_MULTIPLIER[section] ?? 1.0;
+  // }
   
   function bestDiscountRate({ category, partySize, hasLoyalty }) {
-    const rates = [];
-  
-    if (category === "child") rates.push(DISCOUNT_RATES.child);
-    if (category === "senior") rates.push(DISCOUNT_RATES.senior);
-    if (partySize > 10) rates.push(DISCOUNT_RATES.group);
-    if (hasLoyalty) rates.push(DISCOUNT_RATES.loyalty);
-  
-    return rates.length ? Math.max(...rates) : 0;
-  }
-  
-  function calcTicketPrice({ baseCost, section, category, partySize, hasLoyalty }) {
-    const fullPrice = +(Number(baseCost || 0) * getLocationMultiplier(section)).toFixed(2);
-    const rate = bestDiscountRate({ category, partySize, hasLoyalty });
-    const finalPrice = +(fullPrice * (1 - rate)).toFixed(2);
-  
-    return {
-      fullPrice,
-      discountRate: rate,
-      finalPrice,
-      discountAmount: +(fullPrice - finalPrice).toFixed(2),
-    };
-  }
-  
+  const c = String(category || "adult").toLowerCase();
 
-  const setCategoryForSeat = (seat, newCategory) => {
-    const k = seatKey(seat);
+  // ✅ Adult: ONLY loyalty discount (otherwise none)
+  if (c === "adult") {
+    return hasLoyalty
+      ? { type: "loyalty", rate: DISCOUNT_RATES.loyalty }
+      : { type: "none", rate: 0 };
+  }
+
+  // ✅ Non-adult: choose the best discount among candidates
+  const candidates = [{ type: "none", rate: 0 }];
+
+  if (c === "child") candidates.push({ type: "child", rate: DISCOUNT_RATES.child });
+  if (c === "senior") candidates.push({ type: "senior", rate: DISCOUNT_RATES.senior });
+
+  // Group can apply to non-adult if partySize > 10
+  if (Number(partySize) > 10) candidates.push({ type: "group", rate: DISCOUNT_RATES.group });
+
+  // Loyalty can apply (non-compounded)
+  if (hasLoyalty) candidates.push({ type: "loyalty", rate: DISCOUNT_RATES.loyalty });
+
+  return candidates.reduce((best, cur) => (cur.rate > best.rate ? cur : best), candidates[0]);
+}
+
   
-    setSeatCategories((prev) => ({ ...prev, [k]: newCategory }));
-  
-    setSelectedSeats((prev) => {
-      const partySize = prev.length;
-  
-      return prev.map((s) => {
-        if (seatKey(s) !== k) return s;
-  
-        const baseCost = Number(s.baseCost ?? s.price) || 0;
-        const { fullPrice, discountRate, finalPrice, discountAmount } =
-          calcTicketPrice({
-            baseCost,
-            section: s.section,
-            category: newCategory,
-            partySize,
-            hasLoyalty,
-          });
-  
-        return {
-          ...s,
-          category: newCategory,
-          baseCost,
-          fullPrice,
-          discountRate,
-          discountAmount,
-          price: finalPrice,
-        };
-      });
-    });
+function calcTicketPrice({ baseCost, section, category, partySize, hasLoyalty }) {
+  const fullPrice = +(Number(baseCost || 0) * getLocationMultiplier(section)).toFixed(2);
+
+  const best = bestDiscountRate({ category, partySize, hasLoyalty });
+  const discountRate = Number(best?.rate || 0);
+
+  const finalPrice = +(fullPrice * (1 - discountRate)).toFixed(2);
+
+  return {
+    fullPrice,
+    discountRate,
+    finalPrice,
+    discountAmount: +(fullPrice - finalPrice).toFixed(2),
   };
+}
+
+
+const setCategoryForSeat = (seat, newCategory) => {
+  const k = seatKey(seat);
+
+  setSeatCategories((prev) => ({ ...prev, [k]: newCategory }));
+
+  setSelectedSeats((prev) =>
+    prev.map((s) => (seatKey(s) === k ? { ...s, category: newCategory } : s))
+  );
+};
+
   
 
   // const removeSeat = (seatToRemove) => {
@@ -133,7 +132,7 @@ export default function TicketPage() {
         setLoadingEvent(true);
         setEventErr("");
   
-        const res = await fetch(`http://localhost:5001/api/events/${eventId}`);
+        const res = await fetch(`/api/events/${eventId}`);
         if (!res.ok) throw new Error("Failed to load event");
   
         const data = await res.json();
@@ -149,7 +148,11 @@ export default function TicketPage() {
   }, [eventId]);
   
   
-  const totalPrice = selectedSeats.reduce((sum, s) => sum + (Number(s.price) || 0), 0);
+  const totalPrice = selectedSeats.reduce(
+    (sum, s) => sum + (Number(s.baseCost ?? s.price) || 0),
+    0
+  );
+  
   
   const handleRemoveSeat = (seat) => {
     setSelectedSeats((prev) => {
@@ -204,7 +207,7 @@ export default function TicketPage() {
           const token = getToken();
           const payload = buildBookingPayload();
       
-          const res = await fetch("http://localhost:5001/api/bookings", {
+          const res = await fetch("/api/bookings", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -233,18 +236,9 @@ export default function TicketPage() {
         }
       };
       
-      //change categories on seats
       const handleCategoryChange = (seat, newCategory) => {
-        setSelectedSeats((prev) =>
-          prev.map((s) => {
-            const same =
-              s.section === seat.section &&
-              s.row === seat.row &&
-              s.seat === seat.seat;
-      
-            return same ? { ...s, category: newCategory } : s;
-          })
-        );
+        setCategory(newCategory);          // uses your category state (removes eslint warning)
+        setCategoryForSeat(seat, newCategory);
       };
       
   
@@ -304,6 +298,7 @@ export default function TicketPage() {
         {/* LEFT: MAP */}
         <div className="mapWrap">
           <TheatreMap 
+           reservedSeats={event?.reservedSeats || []}
           mapApiRef={mapApiRef}
           onSeatSelect={(seatsArray) => {
             console.log("SEAT OBJ EXAMPLE:", seatsArray?.[0]);
@@ -322,27 +317,18 @@ export default function TicketPage() {
             const enriched = seats.map((s) => {
               const k = seatKey(s);
               const category = nextCats[k]; // "child" | "senior" | "adult"
+            
+              // RAW seat price coming from the map (this matches the tooltip)
               const baseCost = Number(s.basePrice ?? s.price) || 0;
-          
-              const { fullPrice, discountRate, finalPrice, discountAmount } =
-                calcTicketPrice({
-                  baseCost,
-                  section: s.section,
-                  category,
-                  partySize,
-                  hasLoyalty,
-                });
-          
+            
               return {
                 ...s,
-                baseCost,
+                baseCost,     // store raw
                 category,
-                fullPrice,
-                discountRate,
-                discountAmount,
-                price: finalPrice, //final per-ticket price
+                price: baseCost, //keep price as raw on TicketPage
               };
             });
+            
           
             setSelectedSeats(enriched);
           }}
@@ -453,9 +439,10 @@ export default function TicketPage() {
               <div className="divider divider--thin" />
 
               <div className="priceRow">
-                <div className="priceRow__price">
-                  £{(Number(s.price) || 0).toFixed(2)}
-                </div>
+              <div className="priceRow__price">
+                  £{(Number(s.baseCost ?? s.price) || 0).toFixed(2)}
+              </div>
+
 
                 <button
                   className="btn btn--ghost btn--sm"
@@ -579,3 +566,4 @@ export default function TicketPage() {
     </div>
   );
 }
+// MAIN.

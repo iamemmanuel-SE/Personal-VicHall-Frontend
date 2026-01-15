@@ -24,6 +24,18 @@
     color: #111;
     opacity: 0.75;
   }
+  .nav-links a {
+    cursor: pointer;
+  }
+  
+  .Navbar_navLinks__UMGgk li{
+    cursor: pointer;
+  }
+
+  nav a {
+    cursor: pointer;
+  }
+  
   
   .vh-nav a.active {
     opacity: 1;

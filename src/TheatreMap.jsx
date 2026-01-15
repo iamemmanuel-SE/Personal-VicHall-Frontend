@@ -1,8 +1,8 @@
 // TheatreMap.jsx
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useMemo, useState } from "react";
 import "./theatreMap.css";
 
-export default function TheatreMap({ onSeatSelect, mapApiRef, maxSeats = Infinity }) {
+export default function TheatreMap({ onSeatSelect, mapApiRef, maxSeats = Infinity, reservedSeats = [] }) {
   const svgRef = useRef(null);
   const wrapRef = useRef(null);
 
@@ -28,6 +28,25 @@ export default function TheatreMap({ onSeatSelect, mapApiRef, maxSeats = Infinit
 
   const seatKey = (s) => `${s.section}-${s.row}-${s.seat}`;
 
+      // reserved seats lookup (fast)
+    const reservedSet = useMemo(() => {
+      const arr = Array.isArray(reservedSeats) ? reservedSeats : [];
+      return new Set(
+        arr.map((s) => {
+          const sec = String(s.section || "").toUpperCase();
+          const r = String(s.row || "").toUpperCase();
+          const n = Number(s.seat);
+          return `${sec}-${r}-${n}`;
+        })
+      );
+    }, [reservedSeats]);
+
+    const isReserved = (seat) =>
+      reservedSet.has(
+        `${String(seat.section || "").toUpperCase()}-${String(seat.row || "").toUpperCase()}-${Number(seat.seat)}`
+      );
+
+
   const isSeatCircle = (el) =>
     el &&
     el.tagName === "circle" &&
@@ -50,6 +69,8 @@ export default function TheatreMap({ onSeatSelect, mapApiRef, maxSeats = Infinit
       y: ((clientY - rect.top) / rect.height) * vbH,
     };
   };
+
+  
 
   // zoom towards a specific viewBox point
   const zoomToPoint = (pt, nextZoom) => {
@@ -164,6 +185,38 @@ export default function TheatreMap({ onSeatSelect, mapApiRef, maxSeats = Infinit
     });
   }, [selectedSeats]);
 
+      // mark reserved seats in the SVG DOM so they are styled + blocked
+      useEffect(() => {
+        const svg = svgRef.current;
+        if (!svg) return;
+      
+        // clear previous reserved marks
+        svg.querySelectorAll('circle[data-reserved="true"]').forEach((c) => {
+          c.removeAttribute("data-reserved");
+          if (c.dataset.status === "reserved") c.dataset.status = "available";
+        });
+      
+        // mark all reserved seats
+        reservedSet.forEach((key) => {
+          const [section, row, seatNumStr] = key.split("-");
+          const seatNum = Number(seatNumStr);
+      
+          // grab circles that match section + row, then compare seat as Number()
+          const candidates = svg.querySelectorAll(
+            `circle[data-section="${section}"][data-row="${row}"]`
+          );
+      
+          candidates.forEach((el) => {
+            if (Number(el.dataset.seat) === seatNum) {
+              el.setAttribute("data-reserved", "true");
+              el.dataset.status = "reserved";
+            }
+          });
+        });
+      }, [reservedSet]);
+      
+
+
   // click handler (sections -> zoom OR seats multi-select)
   const handleSvgClick = (e) => {
     const el = e.target;
@@ -181,7 +234,7 @@ export default function TheatreMap({ onSeatSelect, mapApiRef, maxSeats = Infinit
 
     const { section, row, seat, status, price, currency} = el.dataset;
     if (!section || !row || !seat) return;
-    if (status === "unavailable") return;
+    if (status === "unavailable" || status === "reserved") return;
 
     const seatObj = { 
         section, 
@@ -278,7 +331,12 @@ export default function TheatreMap({ onSeatSelect, mapApiRef, maxSeats = Infinit
     seat.price != null ? ` • £${seat.price.toFixed(2)}` : "";
 
     const text = `${seat.section} • Row ${seat.row} • Seat ${seat.seat}${priceText}${
-        seat.status === "unavailable" ? " (Unavailable)" : ""
+      seat.status === "reserved"
+      ? " (Reserved)"
+      : seat.status === "unavailable"
+      ? " (Unavailable)"
+      : ""
+    
       }`;
 
     setTooltip({ x, y, text });

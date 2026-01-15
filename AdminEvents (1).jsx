@@ -33,8 +33,6 @@ async function deleteEventApi(eventId) {
 /* ================= MODAL (unchanged) ================= */
 
 function AddEventModal({ open, onClose, onCreated }) {
-
-  
   const fileInputRef = useRef(null);
 
   const [form, setForm] = useState({
@@ -56,10 +54,7 @@ function AddEventModal({ open, onClose, onCreated }) {
   const handleImagePick = (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
-  //Preview locally (works immediately)
-  const previewUrl = URL.createObjectURL(file);
-    setField("imageUrl", previewUrl);
+    setField("imageUrl", `/assets/${file.name}`);
   };
 
   const handleSubmit = async (e) => {
@@ -85,39 +80,20 @@ function AddEventModal({ open, onClose, onCreated }) {
     try {
       setSubmitting(true);
       const token = getToken();
-  
-      // CREATE FORMDATA
-      const fd = new FormData();
-      fd.append("title", form.title.trim());
-      fd.append("description", form.description.trim());
-      fd.append("venue", form.venue.trim() || "Victoria Hall");
-      fd.append("dateLabel", form.date);
-      fd.append("timeLabel", form.time);
-      fd.append(
-        "startDateTime",
-        new Date(`${form.date}T${form.time}`).toISOString()
-      );
-      fd.append("status", "published");
-  
-      // APPEND IMAGE FILE (if selected)
-      const file = fileInputRef.current?.files?.[0];
-      if (file) {
-        fd.append("image", file);
-      }
-  
-      // SEND MULTIPART REQUEST
+
       const res = await fetch("/api/events/postevent", {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${token}`, // ❗ DO NOT set Content-Type
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
         },
         credentials: "include",
-        body: fd,
+        body: JSON.stringify(payload),
       });
-  
+
       const data = await res.json().catch(() => ({}));
       if (!res.ok) throw new Error(data.message || "Failed to create event.");
-  
+
       onCreated?.(data);
       onClose();
     } catch (err) {
@@ -126,34 +102,6 @@ function AddEventModal({ open, onClose, onCreated }) {
       setSubmitting(false);
     }
   };
-
-  //   try {
-  //     setSubmitting(true);
-  //     const token = getToken();
-
-  //     const res = await fetch("/api/events/postevent", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //       credentials: "include",
-  //       body: JSON.stringify(payload),
-  //     });
-
-  //     const data = await res.json().catch(() => ({}));
-  //     if (!res.ok) throw new Error(data.message || "Failed to create event.");
-
-  //     onCreated?.(data);
-  //     onClose();
-  //   } catch (err) {
-  //     setError(err?.message || "Failed to create event.");
-  //   } finally {
-  //     setSubmitting(false);
-  //   }
-  // };
-
-  
 
   return (
     <div
@@ -188,18 +136,9 @@ function AddEventModal({ open, onClose, onCreated }) {
               />
             </div>
 
-            <div className="aem-upload" onClick={() => fileInputRef.current?.click()}>
-            {form.imageUrl ? (
-              <img className="aem-uploadPreview" src={form.imageUrl} alt="Cover preview" />
-            ) : (
+            <div className="aem-upload" onClick={() => fileInputRef.current.click()}>
               <div className="aem-uploadText">Upload a cover photo</div>
-            )}
-          </div>
-
-
-            {/* <div className="aem-upload" onClick={() => fileInputRef.current.click()}>
-              <div className="aem-uploadText">Upload a cover photo</div>
-            </div> */}
+            </div>
 
             <input
               ref={fileInputRef}
@@ -287,11 +226,10 @@ export default function AdminEvents() {
       setDeletingId("");
     }
   };
-    // 1) Open modal when you click "Reserve seats"
-    const openReserveModal = (evtObj) => {
-      setSelectedEvent(evtObj);
-      setReserveOpen(true);
-    };
+  const openReserve = (eventObj) => {
+    setSelectedEvent(eventObj);
+    setReserveOpen(true);
+  };
 
   const closeReserve = () => {
     setReserveOpen(false);
@@ -299,33 +237,27 @@ export default function AdminEvents() {
   };
 
   const handleReserveSeats = async ({ row, from, to, section }) => {
-    const token = getToken();
-    if (!token) throw new Error("Missing auth token.");
-  
-    const res = await fetch(
-      `/api/admin/events/${selectedEvent._id}/reserve-seat`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        credentials: "include",
-        body: JSON.stringify({ row, from, section }),
-      }
-    );
-  
-    const data = await res.json().catch(() => ({}));
-    if (!res.ok) throw new Error(data.message || "Failed to reserve seat.");
-  
-    // optional: update the event list locally so UI reflects new reserved seats
-    setEvents((prev) =>
-      prev.map((ev) => (ev._id === selectedEvent._id ? { ...ev, reservedSeats: data.reservedSeats } : ev))
-    );
-  
-    return data;
+    // ✅ connect to your API later.
+    // For now: just log it so you can confirm the modal works.
+    console.log("Reserve seats:", {
+      eventId: selectedEvent?._id,
+      row,
+      from,
+      to,
+      section,
+    });
+
+    // Example future API call:
+    // const token = getToken();
+    // const res = await fetch(`/api/events/${selectedEvent._id}/reserve`, {
+    //   method: "POST",
+    //   headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+    //   credentials: "include",
+    //   body: JSON.stringify({ row, from, to, section }),
+    // });
+    // const data = await res.json().catch(() => ({}));
+    // if (!res.ok) throw new Error(data.message || "Failed to reserve seats");
   };
-  
 
   return (
     <div className="ae-page">
@@ -338,7 +270,7 @@ export default function AdminEvents() {
             <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search Event" />
           </div>
 
-          <h1 className="ae-title">Upcoming Events</h1>
+          <h1 className="ae-title">Upcoming Events – Admin view</h1>
           <div />
         </div>
 
@@ -401,7 +333,7 @@ export default function AdminEvents() {
                   </svg>
                 </button>
 
-                <button className="ae-actionBtn" type="button" onClick={() => openReserveModal(e)}>
+                <button className="ae-actionBtn" type="button" onClick={() => openReserve(e)}>
                   Reserve seats
                 </button>
 
@@ -419,26 +351,21 @@ export default function AdminEvents() {
           setEvents((cur) => [created, ...cur]);
         }}
       />
-          <AdminReserveSeatModal
-          open={reserveOpen}
-          onClose={closeReserve}
-          event={
-            selectedEvent
-              ? {
-                  ...selectedEvent,
-                  dateText:
-                    selectedEvent?.dateLabel && selectedEvent?.timeLabel
-                      ? `${selectedEvent.dateLabel}, ${selectedEvent.timeLabel}`
-                      : selectedEvent?.dateText,
-                  venueText: selectedEvent?.venue || selectedEvent?.venueText,
-                }
-              : null
-          }
-          onReserve={handleReserveSeats}
-        />
-
+            <AdminReserveSeatModal
+        open={reserveOpen}
+        onClose={closeReserve}
+        event={{
+          ...selectedEvent,
+          // map your existing event fields to what the modal expects in the hero area
+          dateText:
+            selectedEvent?.dateLabel && selectedEvent?.timeLabel
+              ? `${selectedEvent.dateLabel}, ${selectedEvent.timeLabel}`
+              : selectedEvent?.dateText,
+          venueText: selectedEvent?.venue || selectedEvent?.venueText,
+        }}
+        onReserve={handleReserveSeats}
+      />
 
     </div>
   );
 }
-//MAIN

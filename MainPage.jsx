@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
-import Navbar from "./components/Navbar";
+// import Navbar from "./components/Navbar";
+import AppNavbar from "./components/AppNavbar";
 import Hero from "./components/Hero";
 import OfferBanner from "./components/OfferBanner";
 import FeatureGrid from "./components/FeatureGrid";
@@ -31,7 +32,7 @@ function MainPage() {
 
   return (
     <div className="app">
-      <Navbar />
+     <AppNavbar />
       <Hero />
       <OfferBanner />
       <FeatureGrid />

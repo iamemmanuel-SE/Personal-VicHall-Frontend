@@ -61,7 +61,7 @@ export default function AccountPage() {
 
   return (
     <div className="acct-root">
-        <AppNavbar />
+     <AppNavbar />
       {/* <header className="acct-nav">
         <div className="acct-nav-inner">
           <div className="acct-brand">vicHall.</div>
@@ -164,4 +164,4 @@ function SendIcon() {
     </svg>
   );
 }
-//MAIN.
+//MAIN

@@ -4,7 +4,7 @@ import "./events.css";
 import Navbar from "./components/Navbar";
 
 async function fetchEventsApi() {
-  const res = await fetch("http://localhost:5001/api/events");
+  const res = await fetch("/api/events");
   const data = await res.json().catch(() => []);
   if (!res.ok) throw new Error(data.message || "Failed to fetch events.");
   return Array.isArray(data) ? data : [];

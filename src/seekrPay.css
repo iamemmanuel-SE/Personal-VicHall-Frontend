@@ -1,3 +1,20 @@
+/* Center the whole checkout page like TicketPage */
+.seekr-shell {
+  width: min(1200px, calc(100vw - 80px));
+  margin: 0 auto;
+}
+
+/* Ensure grid never stretches beyond the centered shell */
+.seekr-container {
+  width: 100%;
+}
+
+/* Prevent the left card from forcing the grid wider on refresh */
+.payment-card,
+.summary {
+  min-width: 0;
+}
+
 /* * {
     box-sizing: border-box;
     font-family: Inter, 'poppins';
@@ -7,11 +24,14 @@
     padding: 24px 32px;  /* reduce vertical padding */
     display: flex;
     flex-direction: column;
+    align-items: center;
   }
   
   
   /* Header */
   .seekr-header {
+    width: min(1180px, 100%);
+    margin: 0 auto 16px;
     display: grid;
     grid-template-columns: 50px 1fr 50px;
     align-items: center;
@@ -218,5 +238,63 @@
   /* Push the button to the bottom like your design */
   .pay-btn{
     margin-top: auto;
+  }
+   /* MAIN*/
+   .pay-overlay{
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.35);
+    display: grid;
+    place-items: center;
+    z-index: 9999;
+  }
+  
+  .pay-overlay-card{
+    width: min(460px, calc(100vw - 48px));
+    background: #fff;
+    border-radius: 24px;
+    padding: 28px 24px;
+    border: 2px solid #000;
+    display: grid;
+    justify-items: center;
+    gap: 10px;
+    box-shadow: 0 18px 50px rgba(0,0,0,0.22);
+  }
+  
+  .pay-spinner{
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+    border: 6px solid rgba(0,0,0,0.15);
+    border-top-color: #000;
+    animation: payspin 0.9s linear infinite;
+  }
+  
+  @keyframes payspin{
+    to { transform: rotate(360deg); }
+  }
+  
+  .pay-overlay-title{
+    font-size: 20px;
+    font-weight: 900;
+  }
+  
+  .pay-overlay-sub{
+    font-size: 14px;
+    opacity: 0.75;
+    text-align: center;
+  }
+  
+  .pay-error{
+    display: block;
+    margin-top: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #b00020;
+  }
+  
+  .pay-btn:disabled{
+    opacity: 0.5;
+    cursor: not-allowed;
   }
   

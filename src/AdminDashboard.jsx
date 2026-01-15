@@ -11,13 +11,13 @@ export default function AdminDashboard() {
         <div className="admin-brand">vicHall.</div>
 
         <nav className="admin-links">
-          <Link to="/" className="admin-link">
+          <Link to="/admin" className="admin-link">
             Home
           </Link>
-          <Link to="/events" className="admin-link">
+          <Link to="/admin/events" className="admin-link">
             Events
           </Link>
-          <Link to="/users" className="admin-link">
+          <Link to="/admin/users" className="admin-link">
             Users
           </Link>
         </nav>
@@ -64,3 +64,4 @@ export default function AdminDashboard() {
     </div>
   );
 }
+// MAIN

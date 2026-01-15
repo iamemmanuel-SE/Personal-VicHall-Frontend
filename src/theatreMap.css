@@ -68,6 +68,14 @@
   transform: translate(10px, 10px);
   white-space: nowrap;
 }
+circle[data-status="reserved"],
+circle[data-reserved="true"] {
+  fill: #bdbdbd !important;
+  opacity: 0.55 !important;
+  cursor: not-allowed !important;
+}
+
+
 
 /* =============================
    LAYER TRANSITIONS

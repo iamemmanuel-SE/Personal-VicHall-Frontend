@@ -26,7 +26,7 @@ export default function AdminNavbar() {
         </NavLink>
       </nav>
 
-      <button className="adminNav__account" type="button" onClick={() => navigate("/account")}>
+      <button className="adminNav__account" type="button" onClick={() => navigate("/admin/account")}>
         Account
       </button>
     </header>

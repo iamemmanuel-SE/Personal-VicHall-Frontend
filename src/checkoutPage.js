@@ -2,14 +2,151 @@
 import "./seekrPay.css";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
+import { getToken } from "./auth/authStore";
+
 
 const SeekrPay = () => {
   const { state } = useLocation();
   const navigate = useNavigate();
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 
-  // booking passed from TicketPage: navigate("/checkout", { state: { booking: data.booking, loyalty: data.loyalty } })
-  const [booking, setBooking] = useState(state?.booking || null);
-  const [event, setEvent] = useState(state?.event || null); // optional if you ever pass it later
+  const [touched, setTouched] = useState({});
+  const [errors, setErrors] = useState({});
+  
+
+
+    // booking passed from TicketPage: navigate("/checkout", { state: { booking: data.booking, loyalty: data.loyalty } })
+    const [booking] = useState(state?.booking || null);
+
+    const [event, setEvent] = useState(state?.event || null); // optional if you ever pass it later
+
+  const initialPayForm = {
+    cardName: "",
+    cardNumber: "",
+    exp: "",
+    cvv: "",
+    country: "",
+    address: "",
+    city: "",
+    phone: "",
+  };
+  
+  const [payForm, setPayForm] = useState(initialPayForm);
+  
+  const bookingId = booking?._id; // define bookingId
+  const setPayField = (k, v) => setPayForm((p) => ({ ...p, [k]: v }));
+  const markTouched = (k) => setTouched((t) => ({ ...t, [k]: true }));
+
+  // ---------- formatters ----------
+  const formatCardNumber = (value) => {
+    const digits = value.replace(/\D/g, "").slice(0, 16); // max 16 digits
+    return digits.replace(/(\d{4})(?=\d)/g, "$1 "); // group 4-4-4-4
+  };
+
+
+  const formatCVV = (value) => value.replace(/\D/g, "").slice(0, 3);
+
+  const formatExp = (value) => {
+    const digits = value.replace(/\D/g, "").slice(0, 4); // MMYY
+    if (digits.length <= 2) return digits;
+    return `${digits.slice(0, 2)} / ${digits.slice(2)}`;
+  };
+
+  const isValidCard16 = (card) => card.replace(/\D/g, "").length === 16;
+
+  const isValidCVV = (cvv) => cvv.replace(/\D/g, "").length === 3;
+
+  const isValidExp = (exp) => {
+    const digits = exp.replace(/\D/g, ""); // MMYY
+    if (digits.length !== 4) return false;
+    const mm = parseInt(digits.slice(0, 2), 10);
+    const yy = parseInt(digits.slice(2, 4), 10);
+    if (mm < 1 || mm > 12) return false;
+    // optional: ensure not expired (simple)
+    const now = new Date();
+    const currentYY = now.getFullYear() % 100;
+    const currentMM = now.getMonth() + 1;
+    if (yy < currentYY) return false;
+    if (yy === currentYY && mm < currentMM) return false;
+    return true;
+  };
+
+  const isNotEmpty = (v) => String(v || "").trim().length > 0;
+
+  const validatePayForm = (form) => {
+    const e = {};
+    if (!isNotEmpty(form.cardName)) e.cardName = "Cardholder name is required.";
+    if (!isValidCard16(form.cardNumber)) e.cardNumber = "Card number must be 16 digits.";
+    if (!isValidExp(form.exp)) e.exp = "Enter a valid expiry (MM / YY).";
+    if (!isValidCVV(form.cvv)) e.cvv = "CVV must be 3 digits.";
+    if (!isNotEmpty(form.country)) e.country = "Country is required.";
+    if (!isNotEmpty(form.address)) e.address = "Address is required.";
+    if (!isNotEmpty(form.city)) e.city = "City is required.";
+    if (!isNotEmpty(form.phone)) e.phone = "Phone number is required.";
+    return e;
+  };
+
+    // keep errors in sync while typing (nice UX)
+    useEffect(() => {
+      setErrors(validatePayForm(payForm));
+  }, [payForm]);
+
+  const canPay = Object.keys(errors).length === 0;
+
+  const handleMakePayment = async () => {
+    try {
+      if (!bookingId) throw new Error("Missing booking id");
+  
+      setIsProcessingPayment(true);
+  
+      const token = getToken();
+      const res = await fetch("/api/payments/mock", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        credentials: "include",
+        body: JSON.stringify({ bookingId }),
+      });
+  
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.message || "Payment failed");
+  
+      // Optional: keep the animation visible briefly (feels real)
+      await new Promise((r) => setTimeout(r, 4000));
+  
+      // Reset the form
+      setPayForm(initialPayForm);
+  
+      // Build payment summary
+      const last4 = String(payForm.cardNumber || "").replace(/\D/g, "").slice(-4);
+      const paymentSummary = {
+        cardName: payForm.cardName || "Cardholder",
+        last4: last4 ? `•••• ${last4}` : "•••• ----",
+        paidAt: new Date().toISOString(),
+        amount: booking?.pricing?.total ?? 0,
+        bookingId,
+      };
+  
+
+      
+      // Redirect
+      navigate(`/ticket-confirmation/${bookingId}`, {
+        state: { booking, event, paymentSummary },
+        replace: true, // prevents going back to checkout
+      });
+
+      const e = validatePayForm(payForm);
+      if (Object.keys(e).length) throw new Error("Please complete all payment fields correctly.");
+
+    } catch (e) {
+      alert(e?.message || "Payment failed");
+      setIsProcessingPayment(false);
+    }
+  };
+  
+  
 
   useEffect(() => {
     // If user refreshes /checkout, react-router state is lost
@@ -24,7 +161,7 @@ const SeekrPay = () => {
       try {
         if (!booking?.event) return;
 
-        const res = await fetch(`http://localhost:5001/api/events/${booking.event}`);
+        const res = await fetch(`/api/events/${booking.event}`);
         if (!res.ok) return;
 
         const data = await res.json();
@@ -60,6 +197,17 @@ const SeekrPay = () => {
 
   return (
     <div className="seekr-page">
+          {isProcessingPayment && (
+      <div className="pay-overlay" role="dialog" aria-modal="true">
+        <div className="pay-overlay-card">
+          <div className="pay-spinner" />
+          <div className="pay-overlay-title">Processing payment…</div>
+          <div className="pay-overlay-sub">Please do not refresh or close this page.</div>
+        </div>
+      </div>
+)}
+
+      <div className="seekr-shell"> 
       {/* Header */}
       <header className="seekr-header">
         <button className="back-btn" onClick={() => navigate(-1)}>
@@ -73,52 +221,116 @@ const SeekrPay = () => {
       <div className="seekr-container">
         {/* LEFT – Payment Form */}
         <div className="payment-card">
+        <div className="field">
+          <label>Name of Card</label>
+          <input
+            type="text"
+            value={payForm.cardName}
+            onChange={(e) => setPayField("cardName", e.target.value)}
+            onBlur={() => markTouched("cardName")}
+            placeholder="Full name"
+          />
+          {touched.cardName && errors.cardName && <small className="pay-error">{errors.cardName}</small>}
+        </div>
+
+        <div className="field">
+          <label>Card Number</label>
+          <input
+            type="text"
+            inputMode="numeric"
+            placeholder="1234 5678 9012 3456"
+            value={payForm.cardNumber}
+            onChange={(e) => setPayField("cardNumber", formatCardNumber(e.target.value))}
+            onBlur={() => markTouched("cardNumber")}
+            maxLength={19} // 16 digits + 3 spaces
+          />
+          {touched.cardNumber && errors.cardNumber && <small className="pay-error">{errors.cardNumber}</small>}
+        </div>
+
+        <div className="row">
           <div className="field">
-            <label>Name of Card</label>
-            <input type="text" />
+            <label>Expiration Date</label>
+            <input
+              type="text"
+              inputMode="numeric"
+              placeholder="MM / YY"
+              value={payForm.exp}
+              onChange={(e) => setPayField("exp", formatExp(e.target.value))}
+              onBlur={() => markTouched("exp")}
+              maxLength={7} // "MM / YY"
+            />
+            {touched.exp && errors.exp && <small className="pay-error">{errors.exp}</small>}
           </div>
 
           <div className="field">
-            <label>Card Number</label>
-            <input type="text" />
+            <label>Security Code</label>
+            <input
+              type="password"
+              inputMode="numeric"
+              placeholder="CVV"
+              value={payForm.cvv}
+              onChange={(e) => setPayField("cvv", formatCVV(e.target.value))}
+              onBlur={() => markTouched("cvv")}
+              maxLength={3}
+            />
+            {touched.cvv && errors.cvv && <small className="pay-error">{errors.cvv}</small>}
           </div>
 
-          <div className="row">
-            <div className="field">
-              <label>Expiration Date</label>
-              <input type="text" />
-            </div>
-
-            <div className="field">
-              <label>Security Code</label>
-              <input type="text" />
-            </div>
-
-            <div className="cvv-info">
-              <span className="card-icon">💳</span>
-              <span>3-digits on back of card</span>
-            </div>
+          <div className="cvv-info">
+            <span className="card-icon">💳</span>
+            <span>3-digits on back of card</span>
           </div>
+        </div>
 
-          <div className="field">
-            <label>Country</label>
-            <input type="text" />
-          </div>
+        <div className="field">
+          <label>Country</label>
+          <input
+            type="text"
+            placeholder="United Kingdom"
+            value={payForm.country}
+            onChange={(e) => setPayField("country", e.target.value)}
+            onBlur={() => markTouched("country")}
+          />
+          {touched.country && errors.country && <small className="pay-error">{errors.country}</small>}
+        </div>
 
-          <div className="field">
-            <label>Address Line</label>
-            <input type="text" />
-          </div>
+        <div className="field">
+          <label>Address Line</label>
+          <input
+            type="text"
+            placeholder="Street address"
+            value={payForm.address}
+            onChange={(e) => setPayField("address", e.target.value)}
+            onBlur={() => markTouched("address")}
+          />
+          {touched.address && errors.address && <small className="pay-error">{errors.address}</small>}
+        </div>
 
-          <div className="field">
-            <label>City</label>
-            <input type="text" />
-          </div>
+        <div className="field">
+          <label>City</label>
+          <input
+            type="text"
+            placeholder="City"
+            value={payForm.city}
+            onChange={(e) => setPayField("city", e.target.value)}
+            onBlur={() => markTouched("city")}
+          />
+          {touched.city && errors.city && <small className="pay-error">{errors.city}</small>}
+        </div>
 
-          <div className="field">
-            <label>Phone Number</label>
-            <input type="text" />
-          </div>
+        <div className="field">
+          <label>Phone Number</label>
+          <input
+            type="tel"
+            placeholder="+44"
+            value={payForm.phone}
+            onChange={(e) => setPayField("phone", e.target.value)}
+            onBlur={() => markTouched("phone")}
+          />
+          {touched.phone && errors.phone && <small className="pay-error">{errors.phone}</small>}
+        </div>
+
+
         </div>
 
         {/* RIGHT – Summary */}
@@ -208,20 +420,33 @@ const SeekrPay = () => {
             </div>
 
             <button
-              className="pay-btn"
-              onClick={() => {
-                // Prototype: mark paid / go to confirmation (your choice)
-                // navigate("/confirmation", { state: { booking } });
-                alert("Payment prototype: connect to Stripe/PayPal later ");
-              }}
-            >
-              Make Payment
-            </button>
+            className="pay-btn"
+            disabled={!canPay}
+            onClick={() => {
+              // if somehow clicked while invalid, reveal all errors
+              const e = validatePayForm(payForm);
+              if (Object.keys(e).length) {
+                setTouched({
+                  cardName: true, cardNumber: true, exp: true, cvv: true,
+                  country: true, address: true, city: true, phone: true,
+                });
+                setErrors(e);
+                alert("Please complete all payment fields correctly.");
+                return;
+              }
+              handleMakePayment();
+            }}
+          >
+            Make Payment
+          </button>
+
           </div>
         </div>
+      </div>
       </div>
     </div>
   );
 };
 
 export default SeekrPay;
+//MAIN.
